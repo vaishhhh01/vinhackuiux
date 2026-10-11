@@ -239,7 +239,7 @@ The Current is the water network data travels on. The thin edge of each band sho
 ## Tech Stack
 
 React 18 + TypeScript + Vite, Tailwind (tokens in `src/styles/tokens.css`), Framer Motion, Zustand, XState v5,
-Dexie (IndexedDB offline queue), Workbox PWA, Vitest.
+Dexie (IndexedDB offline queue), Workbox PWA, Vitest. Vercel for deployment
 
 | Rule | File |
 | --- | --- |
