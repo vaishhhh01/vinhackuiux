@@ -47,20 +47,14 @@ export function CaseCard({ colony, ev, onOpen, onHandled }: Props) {
         >
           <GlowDot health={ev.health} size={52} flagged={ev.flagged} />
           <span className="min-w-0 flex-1">
-            <span className="t-body block truncate" style={{ fontSize: 18 }}>{colony.junction}</span>
-            <span className="t-body block truncate" style={{ color: 'var(--text-70)' }}>{colony.name}</span>
-          </span>
-          <span className="flex shrink-0 flex-col items-end gap-1">
-            <span className="t-micro rounded-full px-2 py-0.5" style={{ color: st.color, border: `1.5px solid ${st.color}`, fontWeight: 800 }}>
-              <span aria-hidden="true">{st.shape} </span>{st.word}
+            <span className="t-body block" style={{ fontSize: 18, lineHeight: 1.15 }}>{colony.junction}</span>
+            <span className="t-body block" style={{ color: 'var(--text-70)', fontSize: 15, lineHeight: 1.15 }}>{colony.name}</span>
+            <span
+              className="t-micro mt-1 inline-flex items-center gap-1 rounded-full px-2"
+              style={{ color: st.color, border: `1.5px solid ${st.color}`, fontWeight: 800, lineHeight: '18px' }}
+            >
+              <span aria-hidden="true">{st.shape}</span>{st.word}
             </span>
-            {ev.witnesses > 0 && (
-              <span className="flex gap-0.5" aria-label={`${ev.witnesses} eyes`}>
-                {Array.from({ length: Math.min(ev.witnesses, 3) }, (_, i) => (
-                  <svg key={i} width="18" height="12" viewBox="0 0 24 16" aria-hidden="true"><path d="M1 8 Q12 -2 23 8 Q12 18 1 8 Z" fill="none" stroke="var(--text)" strokeWidth="2.2" /><circle cx="12" cy="8" r="3.4" fill="var(--text)" /></svg>
-                ))}
-              </span>
-            )}
           </span>
         </button>
         <button
@@ -69,7 +63,7 @@ export function CaseCard({ colony, ev, onOpen, onHandled }: Props) {
           aria-label={`Mark ${colony.junction} handled`}
           className="t-body grid shrink-0 place-items-center"
           style={{
-            width: 84, borderRadius: '20px 30px 20px 30px', fontSize: 14,
+            width: 80, borderRadius: '20px 30px 20px 30px', fontSize: 14,
             color: 'var(--warden-gold)', background: 'rgba(255,233,168,0.12)', border: '2px solid var(--warden-gold)',
           }}
         >

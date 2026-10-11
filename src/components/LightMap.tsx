@@ -1,6 +1,5 @@
 import { line, curveCatmullRom } from 'd3-shape'
-import { GlowDot, HEALTH_WORD } from './GlowDot'
-import { healthOf } from '../logic/thresholds'
+import { GlowDot } from './GlowDot'
 import { citizenById, useStore, type Colony } from '../state/store'
 import { useLostAge } from '../hooks/useNow'
 import layers from '../data/layers.json'
@@ -51,6 +50,8 @@ interface WaterMapProps {
   h: number
   colonies: Colony[]
   onPick?: (id: string) => void
+  /** which colonies may be pressed; the rest are shown but out of reach */
+  canPick?: (c: Colony) => boolean
   dot: number
   you: { x: number; y: number }
   youLabel: string
@@ -63,7 +64,7 @@ interface WaterMapProps {
  * Citizen water-map: you (ringed pearl) and colony jellyfish on faint flowing Currents.
  * No numbers, no trends. Colonies are real buttons (>= 64 px hit area) when `onPick` is given.
  */
-export function WaterMap({ view, w, h, colonies, onPick, dot, you, youLabel, dim, soft, rounded = 28 }: WaterMapProps) {
+export function WaterMap({ view, w, h, colonies, onPick, canPick, dot, you, youLabel, dim, soft, rounded = 28 }: WaterMapProps) {
   const sx = w / (view.x1 - view.x0)
   const sy = h / (view.y1 - view.y0)
   const X = (x: number) => (x - view.x0) * sx
@@ -75,8 +76,8 @@ export function WaterMap({ view, w, h, colonies, onPick, dot, you, youLabel, dim
       className="relative overflow-hidden"
       style={{
         width: w, height: h, borderRadius: rounded,
-        background: 'radial-gradient(90% 90% at 50% 35%, #0f3350, #071b2d 85%)',
-        border: '1.5px solid rgba(77,232,210,0.3)',
+        background: 'radial-gradient(90% 90% at 50% 35%, #1d475c, #0d2531 88%)',
+        border: '1.5px solid rgba(91,141,137,0.55)',
         opacity: dim ? 0.5 : 1,
         filter: soft ? 'blur(0.5px)' : undefined,
         transition: 'opacity 1.2s, filter 0.8s',
@@ -87,13 +88,14 @@ export function WaterMap({ view, w, h, colonies, onPick, dot, you, youLabel, dim
         <CurrentLines flowing={!dim} width={Math.max(0.5, 3.2 / sx)} />
       </svg>
       {visible.map((c) => {
-        const hh = healthOf(c.glow)
-        const inner = <GlowDot health={hh} size={dot} hazy={dim} still={dim} />
-        return onPick ? (
+        // Thalassari see places, not health: every light looks the same. Danger is the Warden's call to make.
+        const inner = <GlowDot health="healthy" size={dot} hazy={dim} still={dim} />
+        const reachable = !canPick || canPick(c)
+        return onPick && reachable ? (
           <button
             key={c.id}
             type="button"
-            aria-label={`${c.name}, ${HEALTH_WORD[hh]}. Press to report here.`}
+            aria-label={`${c.name}. You are here: press to report.`}
             onClick={() => onPick(c.id)}
             className="absolute grid place-items-center rounded-full"
             style={{ left: X(c.x) - hit / 2, top: Y(c.y) - hit / 2, width: hit, height: hit }}
@@ -104,7 +106,11 @@ export function WaterMap({ view, w, h, colonies, onPick, dot, you, youLabel, dim
             </span>
           </button>
         ) : (
-          <span key={c.id} className="absolute grid place-items-center" style={{ left: X(c.x) - dot / 2, top: Y(c.y) - dot / 2 }}>
+          <span
+            key={c.id}
+            className="absolute grid place-items-center"
+            style={{ left: X(c.x) - dot / 2, top: Y(c.y) - dot / 2, opacity: onPick ? 0.45 : 1 }}
+          >
             {inner}
             <span className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap rounded-full px-1.5" style={{ background: 'rgba(4,18,31,0.72)', color: 'var(--text)', fontSize: 11, fontWeight: 800, lineHeight: '16px' }}>{c.name}</span>
           </span>
@@ -126,45 +132,31 @@ export function WaterMap({ view, w, h, colonies, onPick, dot, you, youLabel, dim
   )
 }
 
-/** Small home map. Tap it to open the big one. */
-export function LightMap({ onOpen }: { onOpen: () => void }) {
+/** Small home map: where you are among the nearby lights. A view only. */
+export function LightMap() {
   const colonies = useStore((s) => s.colonies)
+  const link = useStore((s) => s.link)
   const me = citizenById(useStore((s) => s.citizenId))
   const home = colonies.find((c) => c.id === me.colonyId)
-  const link = useStore((s) => s.link)
   const lostAge = useLostAge()
   const dim = link === 'lost'
+  const x0 = clamp(me.x - 43, 0, 14)
+  const y0 = clamp(me.y - 17, 0, 35)
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      aria-label="Open the big water map"
-      className="relative block rounded-[28px] text-left"
-      style={{ width: 328, height: 124 }}
-    >
+    <div className="relative" style={{ width: 328, height: 124 }} data-testid="home-map">
       <WaterMap
-        view={{ x0: clamp(me.x - 43, 0, 14), y0: clamp(me.y - 17, 0, 35), x1: clamp(me.x - 43, 0, 14) + 86, y1: clamp(me.y - 17, 0, 35) + 31 }}
+        view={{ x0, y0, x1: x0 + 86, y1: y0 + 31 }}
         w={328} h={124}
         colonies={nearbyColonies(colonies, me)}
         you={me}
         youLabel={`You · ${home?.junction ?? 'Level 1'}`}
         dot={36} dim={dim} soft={link === 'weak'}
       />
-      {/* open-up glyph */}
-      <span
-        className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full"
-        style={{ background: 'rgba(4,18,31,0.75)', border: '1.5px solid var(--glow-cyan)' }}
-        aria-hidden="true"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--glow-cyan)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" />
-        </svg>
-      </span>
       {dim && (
         <span className="t-micro absolute inset-x-0 bottom-1 text-center" style={{ color: 'var(--text)' }} role="status">
           Current silent · last known · {lostAge} min ago
         </span>
       )}
-    </button>
+    </div>
   )
 }

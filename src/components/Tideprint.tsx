@@ -40,7 +40,7 @@ export function Tideprint({ seed, size = 40, glow = true }: { seed: number; size
       className={glow ? 'bloomf-sm' : ''}
       style={{ ['--c' as string]: hue }}
     >
-      <circle cx="50" cy="50" r="46" fill="rgba(10,34,54,0.92)" stroke={hue} strokeOpacity="0.55" strokeWidth="2.5" />
+      <circle cx="50" cy="50" r="46" fill="rgba(29,71,92,0.92)" stroke={hue} strokeOpacity="0.55" strokeWidth="2.5" />
       {arcs.map((a, i) => (
         <path key={i} d={a.d} fill="none" stroke={hue} strokeWidth={a.w} strokeLinecap="round" />
       ))}

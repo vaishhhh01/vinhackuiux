@@ -74,19 +74,19 @@ export function SimulatorPanel() {
         <Action tone="amber" icon={I.eye} title="Someone reports" hint="an eye reaches the Warden" onClick={s.sendMockReport} />
         <Action tone="amber" icon={I.fade} title="Colony fades" hint="a case appears, no alarm" onClick={() => s.dropColony(42)} />
         <Action tone="red" icon={I.dark} title="Colony goes dark" hint="the alarm fires by itself" onClick={() => s.dropColony(18)} />
+        <Action tone="red" icon={I.dark} title="Every colony fails" hint="rare: you must go up a level" onClick={s.failAll} />
         <Action tone="gold" icon={I.route} title="Shortcut test" hint="watch the depth guard" onClick={s.triggerRouteDemo} />
       </div>
 
-      <p className="text-[12px] font-bold leading-snug" style={{ color: 'var(--text-70)' }}>
-        Target: <span style={{ color: 'var(--text)' }}>{target?.name ?? 'Garden 3'}</span>. Calling danger and all clear is the
-        Warden&apos;s job: do it inside the Warden band.
+      <p className="text-[12px] font-bold leading-snug" style={{ color: 'var(--text-70)' }} data-testid="sim-target">
+        Target: <span style={{ color: 'var(--text)' }}>{target?.name ?? 'Garden 3'}</span>
       </p>
 
       <button
         type="button"
         onClick={() => { PulseHaptics.stop(); s.reset() }}
         className="t-body rounded-full"
-        style={{ height: 52, border: '1.5px solid rgba(228,246,243,0.35)', color: 'var(--text)', fontSize: 15 }}
+        style={{ height: 52, border: '1.5px solid rgba(98,139,123,0.7)', color: 'var(--text)', fontSize: 15 }}
       >
         Reset world
       </button>

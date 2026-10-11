@@ -37,12 +37,12 @@ export function ReportCard({ report, destination, now, onOpen, onHandled }: Prop
         >
           <Tideprint seed={report.tideprint} size={52} />
           <span className="min-w-0 flex-1">
-            <span className="t-body block truncate" style={{ fontSize: 17 }}>{who.tideprintId}</span>
-            <span className="t-body block truncate" style={{ color: 'var(--text-70)' }}>
+            <span className="t-body block" style={{ fontSize: 17, lineHeight: 1.15 }}>{who.tideprintId}</span>
+            <span className="t-body block" style={{ color: 'var(--text-70)', fontSize: 15, lineHeight: 1.15 }}>
               → {destination ? destination.name : 'nil'}
             </span>
+            <span className="t-micro block" style={{ lineHeight: 1.2 }}>{minutesAgo(report.at, now)}</span>
           </span>
-          <span className="t-micro shrink-0 pr-3">{minutesAgo(report.at, now)}</span>
         </motion.button>
         <button
           type="button"
@@ -50,7 +50,7 @@ export function ReportCard({ report, destination, now, onOpen, onHandled }: Prop
           aria-label="Mark this eye handled"
           className="t-body grid shrink-0 place-items-center"
           style={{
-            width: 84, borderRadius: '20px 30px 20px 30px', fontSize: 14,
+            width: 80, borderRadius: '20px 30px 20px 30px', fontSize: 14,
             color: 'var(--warden-gold)', background: 'rgba(255,233,168,0.12)', border: '2px solid var(--warden-gold)',
           }}
         >

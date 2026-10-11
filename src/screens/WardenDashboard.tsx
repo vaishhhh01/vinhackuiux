@@ -47,6 +47,7 @@ export function WardenDashboard() {
   const now = useNow(15000)
   const scroller = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<Popup>(null)
+  const [tab, setTab] = useState<'cases' | 'eyes'>('cases')
 
   // Cases are what the sensors flagged. Reports from Thalassari live only under Eyes.
   const cases = useMemo(
@@ -131,38 +132,72 @@ export function WardenDashboard() {
               )}
             </AnimatePresence>
 
-            <SectionTitle label="Cases" n={cases.length}>
-              <GlowDot health={cases.some((c) => c.health === 'dying') ? 'dying' : cases.length ? 'weak' : 'healthy'} size={34} still />
-            </SectionTitle>
-            {cases.length === 0 && <Empty text="all lights are calm" />}
-            <ul className="flex flex-col gap-2" data-testid="cases-list">
-              <AnimatePresence initial={false}>
-                {cases.map((e) => (
-                  <CaseCard
-                    key={e.id} colony={colonyOf(e.id)!} ev={e}
-                    onOpen={() => setPopup({ kind: 'case', id: e.id })}
-                    onHandled={() => setCaseStatus(e.id, 'protected')}
-                  />
-                ))}
-              </AnimatePresence>
-            </ul>
+            <div className="mt-3 grid grid-cols-2 gap-2" role="tablist" aria-label="Cases or eyes">
+              <button
+                type="button" role="tab" aria-selected={tab === 'cases'} onClick={() => setTab('cases')} data-testid="open-cases"
+                aria-label={`Cases, ${cases.length}`}
+                className="flex items-center justify-center gap-2"
+                style={{
+                  height: 68, borderRadius: '30px 20px 30px 20px',
+                  background: tab === 'cases' ? 'rgba(255,233,168,0.16)' : 'rgba(255,255,255,0.04)',
+                  border: tab === 'cases' ? '2.5px solid var(--warden-gold)' : '1.5px solid rgba(98,139,123,0.55)',
+                  color: tab === 'cases' ? 'var(--warden-gold)' : 'var(--text)',
+                }}
+              >
+                <GlowDot health={cases.some((c) => c.health === 'dying') ? 'dying' : cases.length ? 'weak' : 'healthy'} size={34} still />
+                <span className="t-hero" style={{ fontSize: 20 }}>Cases</span>
+                <Count n={cases.length} />
+              </button>
+              <button
+                type="button" role="tab" aria-selected={tab === 'eyes'} onClick={() => setTab('eyes')} data-testid="open-eyes"
+                aria-label={`Eyes, ${open.length}`}
+                className="flex items-center justify-center gap-2"
+                style={{
+                  height: 68, borderRadius: '20px 30px 20px 30px',
+                  background: tab === 'eyes' ? 'rgba(255,233,168,0.16)' : 'rgba(255,255,255,0.04)',
+                  border: tab === 'eyes' ? '2.5px solid var(--warden-gold)' : '1.5px solid rgba(98,139,123,0.55)',
+                  color: tab === 'eyes' ? 'var(--warden-gold)' : 'var(--text)',
+                }}
+              >
+                <EyeIcon size={32} />
+                <span className="t-hero" style={{ fontSize: 20 }}>Eyes</span>
+                <Count n={open.length} />
+              </button>
+            </div>
 
-            <SectionTitle label="Eyes" n={open.length}>
-              <span style={{ color: 'var(--text)' }}><EyeIcon size={34} /></span>
-            </SectionTitle>
-            {open.length === 0 && <Empty text="nobody has reported" />}
-            <ul data-testid="eyes-list">
-              <AnimatePresence initial={false}>
-                {open.map((r) => (
-                  <ReportCard
-                    key={r.id} report={r} now={now}
-                    destination={colonyOf(r.destinationId ?? '')}
-                    onOpen={() => setPopup({ kind: 'eye', id: r.id })}
-                    onHandled={() => handleReport(r.id)}
-                  />
-                ))}
-              </AnimatePresence>
-            </ul>
+            {/* the list is already there, below the buttons */}
+            {tab === 'cases' ? (
+              <div className="mt-2">
+                {cases.length === 0 && <Empty text="all lights are calm" />}
+                <ul className="flex flex-col gap-2" data-testid="cases-list">
+                  <AnimatePresence initial={false}>
+                    {cases.map((e) => (
+                      <CaseCard
+                        key={e.id} colony={colonyOf(e.id)!} ev={e}
+                        onOpen={() => setPopup({ kind: 'case', id: e.id })}
+                        onHandled={() => setCaseStatus(e.id, 'protected')}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </ul>
+              </div>
+            ) : (
+              <div className="mt-2">
+                {open.length === 0 && <Empty text="nobody has reported" />}
+                <ul data-testid="eyes-list">
+                  <AnimatePresence initial={false}>
+                    {open.map((r) => (
+                      <ReportCard
+                        key={r.id} report={r} now={now}
+                        destination={colonyOf(r.destinationId ?? '')}
+                        onOpen={() => setPopup({ kind: 'eye', id: r.id })}
+                        onHandled={() => handleReport(r.id)}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* map-tap sheet (a colony straight from the water) */}
@@ -218,18 +253,14 @@ export function WardenDashboard() {
   )
 }
 
-function SectionTitle({ label, n, children }: { label: string; n: number; children: React.ReactNode }) {
+function Count({ n }: { n: number }) {
   return (
-    <div className="mb-2 mt-4 flex items-center gap-3 px-1">
-      {children}
-      <h3 className="t-hero" style={{ fontSize: 24, color: 'var(--warden-gold)' }}>{label}</h3>
-      <span
-        className="t-body grid place-items-center rounded-full px-2"
-        style={{ minWidth: 30, height: 28, background: n ? 'var(--glow-red)' : 'rgba(228,246,243,0.15)', color: n ? 'var(--abyss)' : 'var(--text)', fontSize: 15 }}
-      >
-        {n}
-      </span>
-    </div>
+    <span
+      className="t-body grid place-items-center rounded-full px-2"
+      style={{ minWidth: 30, height: 28, background: n ? 'var(--glow-red)' : 'rgba(228,246,243,0.15)', color: n ? 'var(--abyss)' : 'var(--text)', fontSize: 15 }}
+    >
+      {n}
+    </span>
   )
 }
 

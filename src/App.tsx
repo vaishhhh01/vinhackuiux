@@ -120,8 +120,8 @@ function SideButton({ active, onClick, label, children, tone }: { active: boolea
       className="flex w-full flex-col items-center justify-center gap-1 rounded-[26px]"
       style={{
         height: 86,
-        background: active ? `color-mix(in srgb, ${c} 18%, transparent)` : 'rgba(255,255,255,0.04)',
-        border: `2.5px solid ${active ? c : 'rgba(228,246,243,0.18)'}`,
+        background: active ? `color-mix(in srgb, ${c} 18%, transparent)` : 'rgba(29,71,92,0.28)',
+        border: `2.5px solid ${active ? c : 'rgba(98,139,123,0.55)'}`,
         boxShadow: active ? `0 0 24px color-mix(in srgb, ${c} 40%, transparent)` : undefined,
         color: active ? c : 'var(--text)',
       }}
@@ -177,7 +177,7 @@ export default function App() {
   }, [])
 
   const n = dual ? 2 : 1
-  const stageW = desktop ? w - 232 - 320 - 72 : w - (phone ? 0 : 24)
+  const stageW = desktop ? w - 244 - 320 - 72 : w - (phone ? 0 : 24)
   const byW = stageW / (n * 360 + (n - 1) * 40)
   const byH = (h - (desktop ? 150 : phone ? 190 : 250)) / 640
   const scale = Math.max(0.5, Math.min(phone ? 1.6 : 1.15, byW, byH))
@@ -187,7 +187,7 @@ export default function App() {
   const left = (
     <aside
       aria-label="Controls"
-      className={desktop ? 'sticky top-4 flex max-h-[calc(100vh-32px)] w-[212px] shrink-0 flex-col gap-4 overflow-y-auto band-scroll' : 'flex w-full max-w-[420px] flex-col gap-4'}
+      className={desktop ? 'sticky top-4 flex max-h-[calc(100vh-32px)] w-[224px] shrink-0 flex-col gap-4 overflow-y-auto px-3 py-1 band-scroll' : 'flex w-full max-w-[420px] flex-col gap-4'}
     >
       <nav aria-label="Switch band" className="grid grid-cols-2 gap-2">
         <SideButton tone="cyan" active={!dual && mode === 'citizen'} label="Thalassari" onClick={() => { setSideBySide(false); setMode('citizen') }}>
@@ -230,7 +230,7 @@ export default function App() {
                   style={{
                     height: 76,
                     background: on ? 'rgba(77,232,210,0.2)' : 'rgba(255,255,255,0.04)',
-                    border: on ? '2.5px solid var(--glow-cyan)' : '1.5px solid rgba(228,246,243,0.16)',
+                    border: on ? '2.5px solid var(--glow-cyan)' : '1.5px solid rgba(98,139,123,0.5)',
                     boxShadow: on ? '0 0 18px rgba(77,232,210,0.35)' : undefined,
                   }}
                 >
@@ -274,7 +274,7 @@ export default function App() {
           <aside
             aria-label="Simulation"
             className="sticky top-4 max-h-[calc(100vh-32px)] w-[300px] shrink-0 overflow-y-auto rounded-[32px] p-4 band-scroll"
-            style={{ background: 'rgba(255,233,168,0.05)', border: '2px solid rgba(255,233,168,0.45)', boxShadow: '0 0 40px rgba(255,233,168,0.12)' }}
+            style={{ background: 'rgba(29,71,92,0.28)', border: '2.5px solid rgba(98,139,123,0.55)' }}
           >
             <SimulatorPanel />
           </aside>

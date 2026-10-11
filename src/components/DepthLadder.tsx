@@ -33,15 +33,15 @@ export function DepthLadder({ mark, current = 1 }: { mark: Mark; current?: numbe
               ['--c' as string]: 'var(--glow-cyan)',
               background: here
                 ? 'linear-gradient(90deg, rgba(77,232,210,0.5), rgba(77,232,210,0.14))'
-                : allowed ? 'rgba(77,232,210,0.05)' : 'var(--locked-gray)',
+                : allowed ? 'rgba(44,95,113,0.35)' : 'var(--locked-gray)',
               border: here
                 ? '2px solid var(--glow-cyan)'
-                : allowed ? '1.5px dashed rgba(77,232,210,0.45)' : '1.5px solid transparent',
+                : allowed ? '1.5px dashed rgba(98,139,123,0.85)' : '1.5px solid transparent',
               color: allowed ? 'var(--text)' : 'var(--locked-text)',
             }}
           >
             <span className="grid h-8 w-8 shrink-0 place-items-center" aria-hidden="true">
-              {here ? <GlowDot health="healthy" size={32} /> : allowed ? <span className="block h-3.5 w-3.5 rounded-full border-2 border-[rgba(77,232,210,0.7)]" /> : <Lock />}
+              {here ? <GlowDot health="healthy" size={32} /> : allowed ? <span className="block h-3.5 w-3.5 rounded-full border-2 border-[rgba(98,139,123,0.95)]" /> : <Lock />}
             </span>
             <span className="t-body" style={{ fontSize: 16 }}>
               LEVEL {l.n} · {l.name}

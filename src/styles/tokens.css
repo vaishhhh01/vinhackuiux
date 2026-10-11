@@ -12,6 +12,13 @@
   --text-70: #b1c8d0;
   --calm-blue: var(--living-light);
 
+  /* sampled water: structure only (surfaces, rings, wells), never a signal */
+  --slate-deep: #1d475c;   /* deep water, top of a band */
+  --harbor: #2c5f71;       /* raised surfaces, rings */
+  --sea-fog: #5b8d89;      /* hairlines on dark */
+  --sage-water: #628b7b;   /* dashed "you may enter" lines, quiet borders */
+  --kelp-green: #436d61;   /* weed, tabs, inert chrome */
+
   /* bloom recipes: blur radius + glow-colour alpha */
   --bloom-sm: 12px;
   --bloom-md: 24px;

@@ -11,6 +11,7 @@ import {
   safeRoute, type Graph, type GNode,
 } from './routing'
 import { drop24, fallingHistory, healthOf } from './thresholds'
+import { buildDistrictGraph, canReportFrom, chooseSafeTarget, mustMove, type DistrictColony, type Waypoint } from './district'
 
 const flat = (v: number) => Array(12).fill(v) as number[]
 const col = (id: string, glow: number, history = flat(glow)) => ({ id, glow, history })
@@ -194,5 +195,73 @@ describe('alert state machine', () => {
   })
   it('auto critical enters danger', () => {
     expect(run({ type: 'AUTO_CRITICAL' })).toBe('danger')
+  })
+})
+
+describe('where to go: nearest safe colony, next level only as a last resort', () => {
+  const waypoints = layers.graph.nodes.filter((n) => ['w-e', 'w-g', 's1', 's2'].includes(n.id)) as unknown as Waypoint[]
+  const base: DistrictColony[] = (colonies as unknown as DistrictColony[]).map((c) => ({ id: c.id, name: c.name, x: c.x, y: c.y, glow: 90 }))
+  const wearer = { x: 50, y: 48 }
+  const graphOf = (cs: DistrictColony[]) => buildDistrictGraph(cs, wearer, waypoints, layers.exit as never)
+  const go = (cs: DistrictColony[], mark: 'shallow' | 'middle' | 'deep' | 'hollow') =>
+    chooseSafeTarget(graphOf(cs), cs, { x: 50, y: 38, id: 'garden-3' }, layers.dangerRadius, mark)
+
+  it('sends you to the nearest bright colony outside the dark zone, on this level', () => {
+    const t = go(base, 'middle')!
+    expect(t.kind).toBe('colony')
+    expect(t.id).not.toBe('garden-3')
+    // nothing brighter-and-closer was skipped
+    const d = (id: string) => Math.hypot(base.find((c) => c.id === id)!.x - wearer.x, base.find((c) => c.id === id)!.y - wearer.y)
+    expect(d(t.id)).toBeLessThanOrEqual(Math.min(...base.filter((c) => c.id !== 'garden-3' && d(c.id) > 14).map((c) => d(c.id))) + 8)
+  })
+
+  it('skips faded and failed colonies', () => {
+    const near = go(base, 'middle')!.id
+    const dim = base.map((c) => (c.id === near ? { ...c, glow: 40 } : c))
+    expect(go(dim, 'middle')!.id).not.toBe(near)
+  })
+
+  it('rare case: every colony failed -> next level (Level 2) if the Depth Mark allows it', () => {
+    const dead = base.map((c) => ({ ...c, glow: 12 }))
+    const t = go(dead, 'middle')!
+    expect(t.kind).toBe('level')
+    expect(t.level).toBe(2)
+    expect(t.route.deepest).toBeLessThanOrEqual(2)
+  })
+
+  it('rare case with a Shallow mark: nowhere to go, never a deeper route', () => {
+    const dead = base.map((c) => ({ ...c, glow: 12 }))
+    expect(go(dead, 'shallow')).toBeNull()
+  })
+
+  it('whatever the mark, the chosen route never exceeds it', () => {
+    for (const mark of ['shallow', 'middle', 'deep', 'hollow'] as const) {
+      for (const cs of [base, base.map((c) => ({ ...c, glow: 12 }))]) {
+        const t = go(cs, mark)
+        if (t) expect(t.route.deepest).toBeLessThanOrEqual({ shallow: 1, middle: 2, deep: 3, hollow: 4 }[mark])
+      }
+    }
+  })
+})
+
+describe('only the affected area moves', () => {
+  const danger = { x: 50, y: 38 } // Garden 3
+  const r = layers.dangerRadius
+  it('people standing in the zone must move', () => {
+    expect(mustMove({ x: 50, y: 48 }, danger, r)).toBe(true) // Naela, Oriel
+  })
+  it('people elsewhere in the district do not', () => {
+    for (const p of [{ x: 64, y: 46 }, { x: 25, y: 37 }, { x: 84, y: 32 }, { x: 66, y: 56 }]) {
+      expect(mustMove(p, danger, r)).toBe(false) // Maren, Sevra, Tamsin, Pelle
+    }
+  })
+})
+
+describe('reporting is local', () => {
+  it('a witness can report only from the colony they stand at', () => {
+    const naela = { x: 50, y: 48 }
+    expect(canReportFrom(naela, { x: 50, y: 38 })).toBe(true) // Garden 3, their own
+    expect(canReportFrom(naela, { x: 66, y: 42 })).toBe(false) // Reef 2, another place
+    expect(canReportFrom(naela, { x: 12, y: 12 })).toBe(false) // Vent Rim, across the district
   })
 })

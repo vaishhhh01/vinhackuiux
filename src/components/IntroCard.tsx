@@ -6,7 +6,7 @@ export const PROBLEM_STATEMENT =
 
 const STEPS: { who: string; what: string }[] = [
   { who: 'Left', what: 'Choose a band: Thalassari, Warden, or Both side by side.' },
-  { who: 'Thalassari', what: 'Press REPORT, press the light you saw it near, then hold REPORT THEFT.' },
+  { who: 'Thalassari', what: 'Press REPORT, then hold REPORT THEFT. You can only report from where you stand.' },
   { who: 'Warden', what: 'Open Eyes, press an eye, then hold DANGER to alert everyone.' },
   { who: 'Thalassari', what: 'Follow the glowing route to the exit, then hold I’M SAFE.' },
   { who: 'Warden', what: 'Press ALL CLEAR when the water is calm again.' },

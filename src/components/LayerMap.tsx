@@ -43,7 +43,7 @@ export function LayerMap({ colonies, evals, selectedId, highlightId, patrol, lin
       className="relative overflow-hidden"
       style={{
         width: MAP_W, height: MAP_H, borderRadius: 24,
-        background: 'radial-gradient(90% 90% at 50% 40%, #12354f, #071b2d 85%)',
+        background: 'radial-gradient(90% 90% at 50% 40%, #1d475c, #0d2531 88%)',
         border: '2px solid rgba(255,233,168,0.5)',
         opacity: lost ? 0.5 : 1,
         transition: 'opacity 1.2s',

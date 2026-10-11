@@ -19,7 +19,7 @@ export function DetailPopup({ children, onClose, label }: { children: ReactNode;
         style={{
           padding: '16px 16px 18px',
           borderRadius: '40px 28px 40px 28px',
-          background: 'linear-gradient(180deg, #0f2d46, #07192a)',
+          background: 'linear-gradient(180deg, #1d475c, #0c2430)',
           border: '2px solid var(--warden-gold)',
           boxShadow: '0 0 40px rgba(255,233,168,0.25)',
         }}

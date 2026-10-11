@@ -6,23 +6,11 @@ import { PressureButton } from '../components/PressureButton'
 import { SafeRoutePath, type RoutePhase } from '../components/SafeRoutePath'
 import { DANGER_RADIUS, citizenById, useStore } from '../state/store'
 import layers from '../data/layers.json'
-import { MARK_MAX_LAYER, firstViolation, naiveShortcut, nodesInRadius, safeRoute, type Graph } from '../logic/routing'
-import { healthOf } from '../logic/thresholds'
+import { MARK_MAX_LAYER, firstViolation, naiveShortcut } from '../logic/routing'
+import { buildDistrictGraph, chooseSafeTarget, type Waypoint } from '../logic/district'
 
-const baseGraph = layers.graph as unknown as Graph
-
-/** Put the wearer's own start node where they stand, linked to the two nearest lit L1 nodes and the deep shortcut. */
-function graphFor(at: { x: number; y: number }): Graph {
-  const nodes = baseGraph.nodes.map((n) => (n.id === 'you' ? { ...n, x: at.x, y: at.y } : n))
-  const near = nodes
-    .filter((n) => n.id !== 'you' && n.layer === 1 && n.id !== 'exit')
-    .sort((a, b) => Math.hypot(a.x - at.x, a.y - at.y) - Math.hypot(b.x - at.x, b.y - at.y))
-    .slice(0, 3)
-  const edges = baseGraph.edges.filter(([a, b]) => a !== 'you' && b !== 'you')
-  for (const n of near) edges.push(['you', n.id])
-  edges.push(['you', 's1'])
-  return { nodes, edges }
-}
+const WAYPOINTS = (layers.graph.nodes as Waypoint[]).filter((n) => ['w-e', 'w-g', 's1', 's2'].includes(n.id))
+const EXIT = layers.exit
 /** after the two red pulses the map swells to fill the band */
 const GROW = 1.5
 const GROW_AFTER_MS = 2300
@@ -46,15 +34,39 @@ export function SafeRoute() {
   const danger = colonies.find((c) => c.id === dangerId) ?? colonies[0]
   const max = MARK_MAX_LAYER[mark]
 
-  const { safe, naive, violation } = useMemo(() => {
-    const graph = graphFor(me)
-    const avoid = nodesInRadius(graph, danger.x, danger.y, DANGER_RADIUS)
-    avoid.delete('you')
-    avoid.delete('exit')
-    const s = safeRoute(graph, 'you', 'exit', mark, avoid)
-    const n = naiveShortcut(graph, 'you', 'exit')
-    return { safe: s, naive: n, violation: n ? firstViolation(n, max) : -1 }
-  }, [danger.id, mark, max, me.x, me.y])
+  const { safe, naive, violation, target } = useMemo(() => {
+    // go to the NEAREST bright colony outside the dark zone; only if none is left, up a level
+    const graph = buildDistrictGraph(colonies, me, WAYPOINTS, { ...EXIT, lit: true })
+    const t = chooseSafeTarget(graph, colonies, { x: danger.x, y: danger.y, id: danger.id }, DANGER_RADIUS, mark)
+    const n = t ? naiveShortcut(graph, 'you', t.id) : null
+    return { safe: t?.route ?? null, naive: n, violation: n ? firstViolation(n, max) : -1, target: t }
+  }, [danger.id, mark, max, me.x, me.y, colonies])
+
+  const frame = useMemo(() => {
+    const pts: { x: number; y: number }[] = [
+      { x: me.x, y: me.y },
+      { x: danger.x - DANGER_RADIUS, y: danger.y - DANGER_RADIUS },
+      { x: danger.x + DANGER_RADIUS, y: danger.y + DANGER_RADIUS },
+      ...(safe?.points ?? []),
+    ]
+    if (target && safe) {
+      // keep the whole destination tag in view, not just its colony
+      const dest = safe.points[safe.points.length - 1]
+      const text = target.kind === 'level' ? target.label : `SAFE · ${target.label}`
+      const half = Math.max(24, text.length * 2.15 + 6) / 2
+      const below = dest.y > me.y // tag goes on the far side from the wearer so the two labels never sit on top of each other
+      pts.push({ x: dest.x - half, y: below ? dest.y : dest.y - 13 }, { x: dest.x + half, y: below ? dest.y + 13 : dest.y + 4 })
+    }
+    const pad = 9 // map units of breathing room, so tags and the You label are never cut
+    const x0 = Math.min(...pts.map((p) => p.x)) - pad
+    const x1 = Math.max(...pts.map((p) => p.x)) + pad
+    const y0 = Math.min(...pts.map((p) => p.y)) - pad
+    const y1 = Math.max(...pts.map((p) => p.y)) + pad
+    const bx = px(x0), bw = px(x1) - px(x0), by = py(y0), bh = py(y1) - py(y0)
+    const W = MAP_W, H = MAP_H * GROW
+    const s = Math.max(1, Math.min(2.1, W / bw, H / bh))
+    return { s, x: W / 2 - s * (bx + bw / 2), y: H / 2 - s * (by + bh / 2) }
+  }, [me.x, me.y, danger.x, danger.y, safe, target])
 
   const [phase, setPhase] = useState<RoutePhase>('safe')
   const [grown, setGrown] = useState(false)
@@ -85,7 +97,7 @@ export function SafeRoute() {
   useEffect(() => { if (!demo) setRerouted(false) }, [mark, danger.id])
 
   const noRoute = blocked || !safe
-  const lit = colonies.filter((c) => c.glow >= 35)
+  const lit = colonies // neutral lights: the route, not a colony's health, is what a wearer needs
   const dark = DANGER_RADIUS * (MAP_W / 100)
   const sub = source === 'sensor' ? `Lights failing near ${danger.junction}` : `Warden declared ${danger.junction} unsafe`
 
@@ -135,9 +147,9 @@ export function SafeRoute() {
         data-grown={grown}
       >
         <motion.div
-          style={{ width: MAP_W, height: MAP_H, transformOrigin: '50% 0%', position: 'relative' }}
+          style={{ width: MAP_W, height: MAP_H, transformOrigin: '0 0', position: 'relative' }}
           initial={false}
-          animate={{ scale: grown ? GROW : 1 }}
+          animate={grown ? { scale: frame.s, x: frame.x, y: frame.y } : { scale: 1, x: 0, y: 0 }}
           transition={{ duration: 1.4, ease: [0.22, 0.8, 0.3, 1] }}
         >
         <svg viewBox={`0 0 100 ${VB_H}`} width={MAP_W} height={MAP_H} className="absolute inset-0" role="img" aria-label="Safe route map">
@@ -150,11 +162,18 @@ export function SafeRoute() {
           </defs>
           <CurrentLines opacity={0.18} />
           <circle cx={danger.x} cy={danger.y} r={DANGER_RADIUS} fill="url(#dz)" stroke="var(--glow-red)" strokeWidth="0.7" strokeDasharray="1.6 1.6" className="pulse-slow" />
-          {/* exit marker */}
-          <g transform={`translate(${layers.exit.x} ${layers.exit.y})`}>
-            <rect x="-17" y="-4.6" width="34" height="9.2" rx="4.6" fill="rgba(77,232,210,0.16)" stroke="var(--glow-cyan)" strokeWidth="0.8" style={{ filter: 'drop-shadow(0 0 2px var(--glow-cyan))' }} />
-            <text textAnchor="middle" y="1.3" fontSize="3.3" fontWeight="800" fill="var(--text)">EXIT · LEVEL 1 · SAFE</text>
-          </g>
+          {/* destination: the nearest safe colony, or (rare) the next level */}
+          {target && !noRoute && (() => {
+            const dest = target.route.points[target.route.points.length - 1]
+            const text = target.kind === 'level' ? target.label : `SAFE · ${target.label}`
+            const w = Math.max(24, text.length * 2.15 + 6)
+            return (
+              <g transform={`translate(${dest.x} ${dest.y > me.y ? dest.y + 8 : dest.y - 7})`}>
+                <rect x={-w / 2} y="-4.4" width={w} height="8.8" rx="4.4" fill="rgba(77,232,210,0.16)" stroke="var(--glow-cyan)" strokeWidth="0.8" />
+                <text textAnchor="middle" y="1.2" fontSize="3.3" fontWeight="800" fill="var(--text)">{text}</text>
+              </g>
+            )
+          })()}
           {!noRoute && <SafeRoutePath safe={safe} naive={naive} violation={violation} phase={phase} mark={max} />}
           {phase === 'blocked' && !noRoute && (
             <text x="50" y="62" textAnchor="middle" fontSize="4" fontWeight="800" fill="var(--glow-amber)">too deep</text>
@@ -162,7 +181,7 @@ export function SafeRoute() {
         </svg>
         {lit.map((c) => (
           <span key={c.id} className="absolute" style={{ left: px(c.x) - 11, top: py(c.y) - 11 }} aria-hidden="true">
-            <GlowDot health={healthOf(c.glow)} size={22} still />
+            <GlowDot health="healthy" size={22} still />
             <span className="absolute left-1/2 whitespace-nowrap rounded-full px-1" style={{ top: 22, transform: 'translateX(-50%)', background: 'rgba(4,18,31,0.7)', color: 'var(--text)', fontSize: 9, fontWeight: 800, lineHeight: '12px' }}>
               {c.name}
             </span>
@@ -203,7 +222,11 @@ export function SafeRoute() {
               ) : rerouted ? (
                 <p className="t-micro" style={{ color: 'var(--glow-cyan)' }} role="status">rerouted to fit your Depth Mark</p>
               ) : (
-                <p className="t-micro">follow lit colonies</p>
+                <p className="t-micro" data-testid="route-target">
+                  {target?.kind === 'level'
+                    ? 'every colony here has failed · go up to Level 2'
+                    : `nearest safe colony: ${target?.label ?? ''}`}
+                </p>
               )}
             </motion.div>
           )}

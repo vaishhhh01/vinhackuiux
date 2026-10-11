@@ -13,6 +13,7 @@ import {
 } from '../logic/escalation'
 import { planPatrol, type Mark, type Patrol, type Stop } from '../logic/routing'
 import { fallingHistory } from '../logic/thresholds'
+import { mustMove } from '../logic/district'
 
 export type Mode = 'citizen' | 'warden'
 export type LinkState = 'connected' | 'weak' | 'lost' | 'reconnecting'
@@ -50,6 +51,16 @@ export const DANGER_RADIUS = layers.dangerRadius
 
 const seedColonies = (): Colony[] => structuredClone(coloniesSeed) as Colony[]
 
+/** Two reports are already waiting when the site opens, from two wearers in two different places. */
+const seedReports = (): Report[] => {
+  const now = Date.now()
+  const mk = (id: string, citizenId: string, destinationId: string | null, minutesAgo: number): Report => {
+    const who = citizenById(citizenId)
+    return { id, tideprint: who.seed, citizenId: who.id, colonyId: who.colonyId, destinationId, at: now - minutesAgo * 60000, seenAt: now, handled: false }
+  }
+  return [mk('seed-1', 'maren', 'lantern-6', 3), mk('seed-2', 'tamsin', null, 1)]
+}
+
 interface State {
   mode: Mode
   sideBySide: boolean
@@ -85,6 +96,7 @@ interface State {
   applyRemote(p: Record<string, unknown>): void
   setCitizenPanel(p: 0 | 1): void
   dropColony(to: number, id?: string): void
+  failAll(): void
   sendMockReport(): void
   submitReport(colonyId: string): string
   setDestination(reportId: string, colonyId: string | null): void
@@ -234,7 +246,7 @@ export const useStore = create<State>()((set, get) => {
     mode: 'citizen',
     sideBySide: false,
     colonies: seedColonies(),
-    reports: [],
+    reports: seedReports(),
     caseStatus: {},
     depthMark: 'middle',
     citizenId: 'naela',
@@ -285,6 +297,16 @@ export const useStore = create<State>()((set, get) => {
       }))
       if (before.glow >= 70 && to < 70) emit('caution', 'both')
       say(`${before.name} glow ${to} percent`)
+      reconcile()
+    },
+
+    failAll() {
+      set((s) => ({
+        colonies: s.colonies.map((c) => ({
+          ...c, glow: 14, history: fallingHistory(Math.max(c.history[0], 40), 14), flaggedCycles: c.flaggedCycles + 2,
+        })),
+      }))
+      say('Every colony in the district has failed')
       reconcile()
     },
 
@@ -469,7 +491,7 @@ export const useStore = create<State>()((set, get) => {
       criticalSeen = new Set()
       void offlineQueue.clear()
       set({
-        colonies: seedColonies(), reports: [], caseStatus: {}, link: 'connected', lostAt: null,
+        colonies: seedColonies(), reports: seedReports(), caseStatus: {}, link: 'connected', lostAt: null,
         dangerColonyId: null, dangerSource: null, bandsAlerted: null, citizenSafe: false,
         selectedColonyId: null, highlightColonyId: null, selectedCaseId: null, patrol: null,
         lastReport: null, queue: [], mockCursor: 0, routeBlocked: false, citizenPanel: 0,
@@ -487,6 +509,15 @@ export function useEvals(): ColonyEval[] {
   const colonies = useStore((s) => s.colonies)
   const reports = useStore((s) => s.reports)
   return useMemo(() => evaluateAll(colonies, reports), [colonies, reports])
+}
+
+/** Is the wearer inside the affected area? Only then does the alert take over their band. */
+export function useMustMove(): { affected: boolean; danger: Colony | undefined } {
+  const colonies = useStore((s) => s.colonies)
+  const dangerId = useStore((s) => s.dangerColonyId)
+  const me = citizenById(useStore((s) => s.citizenId))
+  const danger = colonies.find((c) => c.id === dangerId)
+  return { danger, affected: danger ? mustMove(me, danger, DANGER_RADIUS) : false }
 }
 
 export function colonyById(colonies: Colony[], id: string | null | undefined) {

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { GlowDot } from './GlowDot'
-import { healthOf } from '../logic/thresholds'
 import type { Colony } from '../state/store'
 
 const AUTO_FADE_MS = 8000
@@ -37,7 +36,7 @@ export function ReportChooser({ nearest, onPick, onDone }: Props) {
     <motion.section
       aria-label="Where are they going? Optional."
       className="relative rounded-[28px] px-3 pb-3 pt-2.5"
-      style={{ background: 'rgba(10,34,54,0.85)', border: '1px solid rgba(77,232,210,0.3)' }}
+      style={{ background: 'rgba(29,71,92,0.7)', border: '1px solid rgba(91,141,137,0.5)' }}
       initial={{ opacity: 0, y: 24, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 12, scale: 0.97, transition: { duration: 0.6 } }}
@@ -64,7 +63,7 @@ export function ReportChooser({ nearest, onPick, onDone }: Props) {
                 className={`relative grid place-items-center rounded-full ${sel ? 'bloom-lg' : ''}`}
                 style={{ width: 72, height: 72, ['--c' as string]: 'var(--glow-cyan)', background: sel ? 'rgba(77,232,210,0.25)' : 'rgba(255,255,255,0.03)', border: sel ? '2px solid var(--glow-cyan)' : '1px solid rgba(77,232,210,0.25)' }}
               >
-                <GlowDot health={healthOf(c.glow)} size={56} still={!sel} />
+                <GlowDot health="healthy" size={56} still={!sel} />
                 {sel && <span className="t-micro absolute -top-1 right-0 rounded-full bg-[var(--glow-cyan)] px-1.5 text-[10px] font-extrabold text-[#04121f]">ADDED</span>}
               </span>
               <span className="t-micro text-center leading-tight" style={{ color: 'var(--text)' }}>{c.name}</span>
