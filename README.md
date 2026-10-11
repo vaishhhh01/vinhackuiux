@@ -2,7 +2,7 @@
 
 <img src="docs/images/logo.png" alt="Lumen" width="360" />
 
-### The app for solving Thalassa's problem
+<h3><img src="docs/headings/the-app-for-solving-thalassa-s-problem.svg" alt="The app for solving Thalassa&#39;s problem" height="46" /></h3>
 
 ![React](https://img.shields.io/badge/React-18-1d475c?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-2c5f71?logo=typescript&logoColor=white)
@@ -20,7 +20,7 @@
 <img src="docs/images/screens.jpg" alt="The Thalassari band and the Warden band running side by side" width="760" />
 </div>
 
-## About
+<h2><img src="docs/headings/about.svg" alt="About" height="52" /></h2>
 
 THALASSA is an ocean-only universe. There is no land, sky, or human technology. Life is organised by water depth,
 pressure, darkness, temperature, and moving Currents.
@@ -32,7 +32,7 @@ unsafe. LUMEN allows citizens to report the problem and lets Wardens respond bef
 This is not "a normal app with an underwater skin." It could only exist in this universe because it uses water
 pressure, bioluminescent signals, depth permissions, Currents, and living Ilyri colonies.
 
-### Setup
+<h3><img src="docs/headings/setup.svg" alt="Setup" height="46" /></h3>
 
 ```bash
 git clone https://github.com/vaishhhh01/vinhack-uiux.git
@@ -53,7 +53,7 @@ and the whole site unlocks.
 <img src="docs/images/first-load.jpg" alt="First load: gray veil with a pulsing About button" width="620" />
 </div>
 
-### Layers of Thalassa
+<h3><img src="docs/headings/layers-of-thalassa.svg" alt="Layers of Thalassa" height="46" /></h3>
 
 | Layer | Name | Character |
 |---|---|---|
@@ -63,7 +63,7 @@ and the whole site unlocks.
 | 4 | The Hollow | Restricted, dark trenches; specialised outposts, research, and Veyr territories |
 | 5 | Frozen Floor | Near-unreachable deepest waters with ruins, ancient creatures, and Aethons |
 
-### Creatures of Thalassa
+<h3><img src="docs/headings/creatures-of-thalassa.svg" alt="Creatures of Thalassa" height="46" /></h3>
 
 | Creature | Role in the world |
 |---|---|
@@ -81,7 +81,7 @@ and the whole site unlocks.
 <img src="docs/images/warden.jpg" alt="A Warden" width="560" />
 </div>
 
-### Rules of Thalassa
+<h3><img src="docs/headings/rules-of-thalassa.svg" alt="Rules of Thalassa" height="46" /></h3>
 
 **Nerea.** A small, durable, light-reactive crystal pearl used for everyday purchases, food, tools and transport,
 and for exchanging goods between travellers and Thalassari. It is a mineral currency, never made from Ilyri, so the
@@ -102,7 +102,7 @@ investigation.
 
 **Currents** are THALASSA’s supply routes. They carry food, warm water, minerals and trade goods from the productive Luminous Reaches down to the deeper layers, which can’t grow their own. Each Current has a safe stretch and a dangerous one, so cargo crews and travellers ride only the lit stretches that Ilyri colonies mark. In Lumen a dying colony or a declared danger can mark that stretch of Current as unsafe, which reroutes citizens on the Safe Route screen and also tells the Warden which supply routes are at risk.
 
-### Problem statement
+<h3><img src="docs/headings/problem-statement.svg" alt="Problem statement" height="46" /></h3>
 
 In THALASSA, Ilyri colonies provide light, safe navigation, and warnings for every layer. But an illegal trade is
 draining them: some Thalassari, who have legal access to Ilyri habitats, steal colonies to sell to buyers in the
@@ -111,7 +111,7 @@ guards a whole layer and cannot watch every district. When colonies die, distric
 dangerous, and citizens cannot report threats fast enough. Citizens and Wardens need a shared system to monitor Ilyri
 health, report what they witness, and respond before a district goes dark.
 
-### Proposed solution
+<h3><img src="docs/headings/proposed-solution.svg" alt="Proposed solution" height="46" /></h3>
 
 Citizens and Wardens need a shared system to monitor Ilyri health, report suspicious activity, and respond before a
 district goes dark.
@@ -129,7 +129,7 @@ natural fluctuation. Citizens have eyes but no fast channel. LUMEN joins the two
 - The Warden declares danger.
 - Citizens get safe routes before the district goes dark.
 
-### Personas
+<h3><img src="docs/headings/personas.svg" alt="Personas" height="46" /></h3>
 
 **Naela**, age 19, Middle Mark Thalassari. She lives and works in Layer 2 and visits her family in Layer 1. She
 can't enter Layers 3 to 5.
@@ -141,7 +141,7 @@ can't enter Layers 3 to 5.
 **The Layer 1 Warden.** A rare, layer-bound guardian responsible for hundreds of colonies. They can't be
 everywhere. They need prioritised, trustworthy information, not noise.
 
-### Primary user flow
+<h3><img src="docs/headings/primary-user-flow.svg" alt="Primary user flow" height="46" /></h3>
 
 1. Naela passes a Current junction and sees two figures loading glowing creatures into a pressure crate.
 2. She presses and holds the band, and the theft report goes out with her layer and location attached.
@@ -153,7 +153,7 @@ everywhere. They need prioritised, trustworthy information, not noise.
 7. The Warden follows the patrol route, stops the thieves and marks the case handled.
 8. The bands settle: all clear.
 
-### Why the design belongs to Thalassa
+<h3><img src="docs/headings/why-the-design-belongs-to-thalassa.svg" alt="Why the design belongs to Thalassa" height="46" /></h3>
 
 - **The interface is made of the world itself:** pressure, water pulses, bioluminescent light, coral. There is no
   glass, no text-heavy feed, no notification banners, because none of that exists underwater in this culture.
@@ -171,9 +171,9 @@ everywhere. They need prioritised, trustworthy information, not noise.
 <img src="docs/images/ilyri.jpg" alt="An Ilyri colony member" width="300" />
 </div>
 
-## About LUMEN
+<h2><img src="docs/headings/about-lumen.svg" alt="About LUMEN" height="52" /></h2>
 
-### Accessibility and usability
+<h3><img src="docs/headings/accessibility-and-usability.svg" alt="Accessibility and usability" height="46" /></h3>
 
 What Thalassari would actually demand:
 
@@ -192,7 +192,7 @@ What Thalassari would actually demand:
 - **Press-and-hold on every critical action** (report, declare danger): "pressure = intent", straight from the lore,
   and it prevents accidental triggers.
 
-### Using the site
+<h3><img src="docs/headings/using-the-site.svg" alt="Using the site" height="46" /></h3>
 
 1. **On every load or refresh** the page is veiled in gray and only the About button pulses. Open About, read it,
    close it; then everything is usable.
@@ -219,7 +219,7 @@ The world starts with **two user reports already waiting** (Maren at Reef 2, Tam
 <br /><sub>A sensor-triggered alert: the affected Thalassari follows the route to the nearest safe colony while the Warden sees the same danger.</sub>
 </div>
 
-### The bands
+<h3><img src="docs/headings/the-bands.svg" alt="The bands" height="46" /></h3>
 
 **Thalassari** (no swiping, every step is a big button)
 - Home: Tideprint and ID, Depth Mark, five-level ladder, a small map (a view only), **REPORT**.
@@ -238,28 +238,28 @@ The world starts with **two user reports already waiting** (Maren at Reef 2, Tam
 - An eye's popup has **PATROL** and a hold-to-declare **DANGER**. One eye is enough, and a red colony can be
   declared directly. **ALL CLEAR** sends everyone home.
 
-### The Current
+<h3><img src="docs/headings/the-current.svg" alt="The Current" height="46" /></h3>
 
 The Current is the water network data travels on. The thin edge of each band shows it: steady (strong), flickering
 (weak), gray dashes (cut). While cut, reports and declarations are saved in IndexedDB and sent when it returns.
 
-## Tech Stack
+<h2><img src="docs/headings/tech-stack.svg" alt="Tech Stack" height="52" /></h2>
 
 React 18 + TypeScript + Vite, Tailwind (tokens in `src/styles/tokens.css`), Framer Motion, Zustand, XState v5,
-Dexie (IndexedDB offline queue), Workbox PWA, Vitest. Vercel for deployment
+Dexie (IndexedDB offline queue), d3-scale / d3-shape, Workbox PWA (vite-plugin-pwa), Vitest. Vercel for deployment
 
 | Rule | File |
 | --- | --- |
-| WATCH < 70 %, rapid decline > 15 pts / 24 h, CRITICAL < 20 %, 1 eye for danger | `src/logic/thresholds.ts`, `src/logic/escalation.ts` |
+| WATCH < 70 %, rapid decline > 15 pts / 24 h, CRITICAL < 20 % (auto alert), dying < 35 %, 1 eye for danger | `src/logic/thresholds.ts`, `src/logic/escalation.ts` |
 | Router never emits a layer deeper than the Depth Mark | `src/logic/routing.ts` (`safeRoute`) |
-| Nearest safe colony, next level as a last resort, who must move, local reporting | `src/logic/district.ts` |
-| calm → flagged → escalated → danger → allClear | `src/state/alertMachine.ts` |
+| Nearest safe colony (glow ≥ 70 %, failed < 35 % never used), next level as a last resort, who must move, local reporting | `src/logic/district.ts` |
+| calm → flagged → escalated → danger → allClear (back to calm after 5 s) | `src/state/alertMachine.ts` |
 | Offline queue | `src/state/queue.ts` (Dexie), flushed in `src/state/store.ts` |
 | Cross-window live sync | `src/state/sync.ts` |
 | Press-and-hold (1000 ms, pressure-aware, keyboard) | `src/components/PressureButton.tsx` |
 | Pulse patterns + Vibration API | `src/components/PulseHaptics.ts`, `src/components/AlertPulse.tsx` |
 
-### Credits
+<h3><img src="docs/headings/credits.svg" alt="Credits" height="46" /></h3>
 
 - Pinterest for the art concepts
 - Google Fonts for fonts
