@@ -263,10 +263,3 @@ Dexie (IndexedDB offline queue), Workbox PWA, Vitest. Vercel for deployment
 
 - Pinterest for the art concepts
 - Google Fonts for fonts
-
-### Notes
-
-- Map space is 100 × 66 units, drawn at 328 × 216 px on the Warden band.
-- The "Current silent · N min ago" counter is demo time (1 minute per 6 s, starting at 4).
-- The creature artwork in `docs/images` is concept art supplied for this project; check its original credit and
-  licence before reusing it outside this repo.
