@@ -93,10 +93,12 @@ their body can safely enter.
 **Wardens.** Powerful but limited: one depth layer each, able to sense disturbances and run protection systems
 there, unable to patrol freely, and rare, so each covers many colonies, districts and Current routes.
 
-**Ilyri come in three kinds.** Wild (protected, free-drifting), legally harvested (licensed nurseries and permitted
+**Ilyri harvesting** Wild (protected, free-drifting), legally harvested (licensed nurseries and permitted
 zones), and illegal (taken from registered colonies). Registered colonies are never a legal source: removing Ilyri
 from one without permission, transporting them without authorisation, or damaging the habitat triggers a Warden
 investigation.
+
+**Currents** are THALASSA’s supply routes. They carry food, warm water, minerals and trade goods from the productive Luminous Reaches down to the deeper layers, which can’t grow their own. Each Current has a safe stretch and a dangerous one, so cargo crews and travellers ride only the lit stretches that Ilyri colonies mark. In Lumen a dying colony or a declared danger can mark that stretch of Current as unsafe, which reroutes citizens on the Safe Route screen and also tells the Warden which supply routes are at risk.
 
 ### Problem statement
 
@@ -234,7 +236,7 @@ The world starts with **two user reports already waiting** (Maren at Reef 2, Tam
 The Current is the water network data travels on. The thin edge of each band shows it: steady (strong), flickering
 (weak), gray dashes (cut). While cut, reports and declarations are saved in IndexedDB and sent when it returns.
 
-## Under the hood
+## Tech Stack
 
 React 18 + TypeScript + Vite, Tailwind (tokens in `src/styles/tokens.css`), Framer Motion, Zustand, XState v5,
 Dexie (IndexedDB offline queue), Workbox PWA, Vitest.
@@ -250,14 +252,10 @@ Dexie (IndexedDB offline queue), Workbox PWA, Vitest.
 | Press-and-hold (1000 ms, pressure-aware, keyboard) | `src/components/PressureButton.tsx` |
 | Pulse patterns + Vibration API | `src/components/PulseHaptics.ts`, `src/components/AlertPulse.tsx` |
 
-### Look
+### Credits
 
-- The page is black; the bands are deep water, slate-blue at the surface fading to ink.
-- **Structure** uses a sampled water palette: `#1d475c` deep slate, `#2c5f71` harbor, `#5b8d89` sea fog,
-  `#628b7b` sage water, `#436d61` kelp green.
-- **Signals** keep one job each: sea-cyan is the living world, ochre is caution, coral red is danger, brass is
-  Warden authority.
-- The wordmark and headings use **Caprasimo** (SIL Open Font License); body text is Nunito and Fredoka, also OFL.
+- Pinterest for the art concepts
+- Google Fonts for fonts
 
 ### Notes
 
