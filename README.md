@@ -10,6 +10,8 @@
 ![PWA](https://img.shields.io/badge/PWA-offline%20queue-5b8d89)
 ![Tests](https://img.shields.io/badge/tests-33%20passing-628b7b)
 
+**[Try it live: lumen-xi-nine.vercel.app](https://lumen-xi-nine.vercel.app)**
+
 </div>
 
 <hr />
@@ -211,6 +213,11 @@ What Thalassari would actually demand:
    so a Thalassari report in one window shows up in a Warden window.
 
 The world starts with **two user reports already waiting** (Maren at Reef 2, Tamsin at Colony 12).
+
+<div align="center">
+<img src="docs/images/danger.jpg" alt="A district in danger: the Thalassari band showing the safe route and the Warden band showing the alert, with the Simulation panel on the right" width="900" />
+<br /><sub>A sensor-triggered alert: the affected Thalassari follows the route to the nearest safe colony while the Warden sees the same danger.</sub>
+</div>
 
 ### The bands
 
