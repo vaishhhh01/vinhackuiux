@@ -3,3 +3,5 @@ dist
 dev-dist
 *.local
 .DS_Store
+
+.vercel
