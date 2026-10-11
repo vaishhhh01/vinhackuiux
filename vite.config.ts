@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  // listen on every local address (IPv4 and IPv6), so http://localhost:5173 works however the machine resolves "localhost"
+  server: { host: true, port: 5173 },
   plugins: [
     react(),
     VitePWA({
