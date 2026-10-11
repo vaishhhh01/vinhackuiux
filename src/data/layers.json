@@ -1,0 +1,47 @@
+{
+  "layers": [
+    { "n": 1, "name": "Luminous Reaches", "note": "farms, schools, markets" },
+    { "n": 2, "name": "Veiled Cities", "note": "cities, governments, archives" },
+    { "n": 3, "name": "Pressure Gates", "note": "checkpoints, engineering" },
+    { "n": 4, "name": "The Hollow", "note": "restricted, special permission" },
+    { "n": 5, "name": "Frozen Floor", "note": "near unreachable" }
+  ],
+  "marks": {
+    "shallow": { "label": "Shallow", "max": 1 },
+    "middle": { "label": "Middle", "max": 2 },
+    "deep": { "label": "Deep", "max": 3 },
+    "hollow": { "label": "Hollow", "max": 4 }
+  },
+  "you": { "x": 50, "y": 48 },
+  "warden": { "x": 52, "y": 60 },
+  "exit": { "id": "exit", "x": 50, "y": 8, "layer": 1 },
+  "dangerRadius": 14,
+  "graph": {
+    "nodes": [
+      { "id": "you", "x": 50, "y": 48, "layer": 1, "lit": true },
+      { "id": "garden-3", "x": 50, "y": 38, "layer": 1, "colonyId": "garden-3" },
+      { "id": "garden-5", "x": 34, "y": 44, "layer": 1, "colonyId": "garden-5" },
+      { "id": "reef-2", "x": 66, "y": 42, "layer": 1, "colonyId": "reef-2" },
+      { "id": "lantern-1", "x": 22, "y": 32, "layer": 1, "colonyId": "lantern-1" },
+      { "id": "kelp-arch", "x": 30, "y": 20, "layer": 1, "colonyId": "kelp-arch" },
+      { "id": "w-e", "x": 70, "y": 29, "layer": 2, "lit": true },
+      { "id": "w-g", "x": 58, "y": 20, "layer": 2, "lit": true },
+      { "id": "s1", "x": 38, "y": 40, "layer": 3, "lit": false },
+      { "id": "s2", "x": 40, "y": 24, "layer": 3, "lit": false },
+      { "id": "exit", "x": 50, "y": 8, "layer": 1, "lit": true }
+    ],
+    "edges": [
+      ["you", "garden-5"], ["garden-5", "lantern-1"], ["lantern-1", "kelp-arch"], ["kelp-arch", "exit"],
+      ["you", "reef-2"], ["reef-2", "w-e"], ["w-e", "w-g"], ["w-g", "exit"],
+      ["you", "garden-3"], ["garden-3", "kelp-arch"],
+      ["you", "s1"], ["s1", "s2"], ["s2", "exit"], ["garden-5", "s1"], ["kelp-arch", "w-g"]
+    ]
+  },
+  "currents": [
+    [[8, 52], [22, 46], [34, 44], [50, 48], [66, 42], [90, 46]],
+    [[16, 12], [30, 20], [50, 24], [58, 20], [84, 12]],
+    [[50, 48], [52, 60], [68, 58]],
+    [[34, 44], [22, 32], [16, 12]],
+    [[66, 42], [70, 29], [88, 26]]
+  ]
+}

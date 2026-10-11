@@ -1,0 +1,14 @@
+[
+  { "id": "garden-3", "name": "Garden 3", "junction": "Junction 7", "layer": 1, "x": 50, "y": 38, "norm": 54, "glow": 88, "history": [90, 89, 90, 88, 89, 90, 89, 88, 89, 88, 88, 88], "current": "calm", "baseAge": 2, "flaggedCycles": 0 },
+  { "id": "garden-5", "name": "Garden 5", "junction": "Junction 6", "layer": 1, "x": 34, "y": 44, "norm": 48, "glow": 91, "history": [92, 91, 92, 91, 92, 91, 92, 91, 91, 92, 91, 91], "current": "calm", "baseAge": 1, "flaggedCycles": 0 },
+  { "id": "reef-2", "name": "Reef 2", "junction": "Junction 8", "layer": 1, "x": 66, "y": 42, "norm": 60, "glow": 86, "history": [88, 87, 88, 86, 87, 88, 87, 86, 87, 86, 86, 86], "current": "calm", "baseAge": 1, "flaggedCycles": 0 },
+  { "id": "lantern-1", "name": "Lantern 1", "junction": "Junction 5", "layer": 1, "x": 22, "y": 32, "norm": 52, "glow": 94, "history": [94, 95, 94, 94, 95, 94, 94, 95, 94, 94, 94, 94], "current": "calm", "baseAge": 2, "flaggedCycles": 0 },
+  { "id": "kelp-arch", "name": "Kelp Arch", "junction": "Junction 4", "layer": 1, "x": 30, "y": 20, "norm": 44, "glow": 83, "history": [85, 84, 85, 83, 84, 85, 84, 83, 84, 83, 83, 83], "current": "calm", "baseAge": 3, "flaggedCycles": 0 },
+  { "id": "lantern-6", "name": "Lantern 6", "junction": "Junction 9", "layer": 1, "x": 76, "y": 52, "norm": 50, "glow": 90, "history": [91, 90, 91, 90, 91, 90, 91, 90, 90, 91, 90, 90], "current": "calm", "baseAge": 1, "flaggedCycles": 0 },
+  { "id": "colony-12", "name": "Colony 12", "junction": "Junction 10", "layer": 1, "x": 88, "y": 26, "norm": 58, "glow": 64, "history": [76, 75, 74, 73, 72, 71, 70, 69, 68, 67, 65, 64], "current": "calm", "baseAge": 2, "flaggedCycles": 2 },
+  { "id": "colony-4", "name": "Colony 4", "junction": "Junction 3", "layer": 1, "x": 12, "y": 50, "norm": 46, "glow": 89, "history": [90, 90, 89, 90, 89, 90, 89, 89, 90, 89, 89, 89], "current": "calm", "baseAge": 2, "flaggedCycles": 0 },
+  { "id": "ridge-9", "name": "Ridge 9", "junction": "Junction 11", "layer": 1, "x": 84, "y": 12, "norm": 62, "glow": 87, "history": [88, 87, 88, 87, 88, 87, 88, 87, 87, 88, 87, 87], "current": "calm", "baseAge": 3, "flaggedCycles": 0 },
+  { "id": "vent-rim", "name": "Vent Rim", "junction": "Junction 2", "layer": 1, "x": 16, "y": 12, "norm": 40, "glow": 27, "history": [52, 50, 48, 46, 44, 41, 38, 35, 32, 30, 28, 27], "current": "disturbed", "baseAge": 4, "flaggedCycles": 4 },
+  { "id": "atrium-2", "name": "Atrium 2", "junction": "Junction 12", "layer": 1, "x": 90, "y": 46, "norm": 56, "glow": 85, "history": [86, 85, 86, 85, 86, 85, 86, 85, 85, 86, 85, 85], "current": "calm", "baseAge": 2, "flaggedCycles": 0 },
+  { "id": "trench-2", "name": "Trench 2", "junction": "Junction 1", "layer": 1, "x": 68, "y": 58, "norm": 42, "glow": 92, "history": [93, 92, 93, 92, 93, 92, 93, 92, 92, 93, 92, 92], "current": "calm", "baseAge": 1, "flaggedCycles": 0 }
+]

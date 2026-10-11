@@ -1,0 +1,96 @@
+:root {
+  --abyss: #04121f;
+  --abyss-2: #0a2236;
+  --glow-cyan: #4de8d2;
+  --living-light: #a1fff0;
+  --glow-amber: #ffb347;
+  --glow-red: #ff5a5a;
+  --warden-gold: #ffe9a8;
+  --locked-gray: #3a4a55;
+  --locked-text: #c3d1d8;
+  --text: #e4f6f3;
+  --text-70: #b1c8d0;
+  --calm-blue: var(--living-light);
+
+  /* bloom recipes: blur radius + glow-colour alpha */
+  --bloom-sm: 12px;
+  --bloom-md: 24px;
+  --bloom-lg: 40px;
+  --bloom-sm-a: 40%;
+  --bloom-md-a: 50%;
+  --bloom-lg-a: 60%;
+
+  --accent: var(--glow-cyan);
+  --font: 'Nunito', 'Quicksand', ui-rounded, system-ui, sans-serif;
+  --font-display: 'Fredoka', 'Nunito', ui-rounded, system-ui, sans-serif;
+}
+
+/* type scale */
+.t-header { font-family: var(--font-display); font-size: 13px; letter-spacing: 0.06em; font-weight: 600; }
+.t-hero { font-family: var(--font-display); font-size: 22px; font-weight: 600; letter-spacing: 0.01em; }
+.t-body { font-family: var(--font-display); font-size: 15px; font-weight: 500; }
+.t-micro { font-size: 12px; font-weight: 700; color: var(--text-70); }
+
+/* bloom: box-shadow variant for HTML shapes, drop-shadow variant for SVG */
+.bloom-sm { box-shadow: 0 0 var(--bloom-sm) color-mix(in srgb, var(--c, var(--glow-cyan)) var(--bloom-sm-a), transparent); }
+.bloom-md { box-shadow: 0 0 var(--bloom-md) color-mix(in srgb, var(--c, var(--glow-cyan)) var(--bloom-md-a), transparent); }
+.bloom-lg { box-shadow: 0 0 var(--bloom-lg) color-mix(in srgb, var(--c, var(--glow-cyan)) var(--bloom-lg-a), transparent); }
+.bloomf-sm { filter: drop-shadow(0 0 var(--bloom-sm) color-mix(in srgb, var(--c, var(--glow-cyan)) var(--bloom-sm-a), transparent)); }
+.bloomf-md { filter: drop-shadow(0 0 var(--bloom-md) color-mix(in srgb, var(--c, var(--glow-cyan)) var(--bloom-md-a), transparent)); }
+.bloomf-lg { filter: drop-shadow(0 0 var(--bloom-lg) color-mix(in srgb, var(--c, var(--glow-cyan)) var(--bloom-lg-a), transparent)); }
+
+/* pulse vocabulary (timing cues are kept under reduced motion; travelling motion is not) */
+@keyframes pulse-steady { 0%, 100% { opacity: 1 } 50% { opacity: 0.92 } }
+@keyframes pulse-slow { 0%, 100% { transform: scale(1); opacity: 0.85 } 50% { transform: scale(1.09); opacity: 1 } }
+@keyframes pulse-double {
+  0%, 100% { transform: scale(1); opacity: 0.8 }
+  12% { transform: scale(1.16); opacity: 1 }
+  24% { transform: scale(1); opacity: 0.8 }
+  36% { transform: scale(1.16); opacity: 1 }
+  50% { transform: scale(1); opacity: 0.8 }
+}
+@keyframes sway { 0%, 100% { transform: translateX(-1.5px) } 50% { transform: translateX(1.5px) } }
+@keyframes bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-3px) } }
+@keyframes breathe { 0%, 100% { opacity: 0.35 } 50% { opacity: 1 } }
+@keyframes flicker { 0%, 100% { opacity: 0.9 } 20% { opacity: 0.35 } 31% { opacity: 0.95 } 55% { opacity: 0.5 } 63% { opacity: 0.85 } 80% { opacity: 0.3 } }
+@keyframes drift { from { transform: translateY(0) } to { transform: translateY(-110vh) } }
+@keyframes flow { to { stroke-dashoffset: -24 } }
+@keyframes shimmer { to { stroke-dashoffset: -1000 } }
+@keyframes shimmer-heat { 0%, 100% { transform: scale(1) } 50% { transform: scale(1.18) } }
+@keyframes sweep { from { stroke-dashoffset: 0 } to { stroke-dashoffset: -1000 } }
+
+.pulse-steady { animation: pulse-steady 4s ease-in-out infinite; }
+.pulse-slow { animation: pulse-slow 3.2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.pulse-double { animation: pulse-double 1.1s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.sway { animation: sway 3.4s ease-in-out infinite; }
+.bob { animation: bob 4.5s ease-in-out infinite; }
+.breathe { animation: breathe 6s ease-in-out infinite; }
+.flicker { animation: flicker 2.7s linear infinite; }
+.flow { animation: flow 1.4s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-slow { animation-name: breathe; animation-duration: 3.2s; }
+  .pulse-double { animation-name: flicker-fast; animation-duration: 1.1s; }
+  .flow { animation: none; }
+  .drift-particle { animation: none !important; }
+  @keyframes flicker-fast { 0%, 100% { opacity: 1 } 12% { opacity: 0.35 } 24% { opacity: 1 } 36% { opacity: 0.35 } 50% { opacity: 1 } }
+}
+
+/* LUMEN wordmark: Transcity (demo, personal-use licence; see public/fonts/transcity-LICENSE.txt) */
+@font-face {
+  font-family: 'Transcity';
+  src: url('/fonts/transcity.otf') format('opentype');
+  font-display: swap;
+}
+.t-brand { font-family: 'Transcity', var(--font-display); font-weight: 400; letter-spacing: 0.02em; text-transform: none; }
+
+/* About button: a ring that keeps swelling out of it, so it is the only thing that asks for a press */
+.about-pulse { animation: about-pulse 1.5s ease-out infinite; }
+@keyframes about-pulse {
+  0% { box-shadow: 0 0 0 2px #fff, 0 0 0 0 rgba(255,255,255,0.75); }
+  70% { box-shadow: 0 0 0 2px #fff, 0 0 0 26px rgba(255,255,255,0); }
+  100% { box-shadow: 0 0 0 2px #fff, 0 0 0 0 rgba(255,255,255,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-pulse { animation: none; box-shadow: 0 0 0 3px #fff, 0 0 24px rgba(255,255,255,0.8); }
+}

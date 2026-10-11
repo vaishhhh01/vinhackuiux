@@ -1,0 +1,6 @@
+[
+  { "citizenId": "oriel", "colonyId": "garden-3", "destinationId": "garden-5", "minutesAgo": 2 },
+  { "citizenId": "maren", "colonyId": "garden-3", "destinationId": null, "minutesAgo": 1 },
+  { "citizenId": "tamsin", "colonyId": "garden-3", "destinationId": "reef-2", "minutesAgo": 0 },
+  { "citizenId": "pelle", "colonyId": "garden-3", "destinationId": null, "minutesAgo": 0 }
+]

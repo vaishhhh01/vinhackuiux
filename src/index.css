@@ -1,0 +1,31 @@
+@import './styles/tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--abyss);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+button { font-family: inherit; color: inherit; }
+button:focus-visible, [role='button']:focus-visible, a:focus-visible, select:focus-visible {
+  outline: 3px solid var(--warden-gold);
+  outline-offset: 3px;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.band-scroll { scrollbar-width: none; }
+.band-scroll::-webkit-scrollbar { display: none; }
+.coral {
+  background:
+    radial-gradient(circle at 18% 40%, rgba(255,255,255,0.18) 0 1.2px, transparent 2px) 0 0 / 9px 7px,
+    radial-gradient(circle at 70% 60%, rgba(0,0,0,0.25) 0 1.4px, transparent 2.2px) 3px 2px / 11px 8px,
+    var(--tab);
+}
