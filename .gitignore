@@ -1,7 +1,5 @@
 node_modules
 dist
 dev-dist
-.claude
 *.local
 .DS_Store
-public/fonts/transcity.otf

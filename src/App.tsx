@@ -85,7 +85,7 @@ function Wordmark({ sub, gold }: { sub: string; gold?: boolean }) {
     <div className="flex items-center gap-3">
       <span className="bob"><GlowDot health="healthy" size={54} /></span>
       <div className="flex flex-col items-start gap-1.5">
-        <div className="t-brand" style={{ fontSize: 58, lineHeight: 0.85, color: c, textShadow: `0 0 24px color-mix(in srgb, ${c} 45%, transparent)` }}>
+        <div className="t-brand" style={{ fontSize: 50, lineHeight: 0.95, color: c, textShadow: `0 0 24px color-mix(in srgb, ${c} 45%, transparent)` }}>
           Lumen
         </div>
         <span

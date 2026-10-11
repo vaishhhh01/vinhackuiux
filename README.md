@@ -64,6 +64,5 @@ IndexedDB and sent when it returns. Browser online/offline events drive the same
 
 - Map space is 100 × 66 units, drawn at 328 × 216 px (Warden) and zoomed views on the Thalassari side.
 - The "Current silent · N min ago" counter is demo time (1 minute per 6 s, starting at 4).
-- The **Lumen** wordmark is set in the Transcity **demo** font, which is free for personal use only and may not be
-  published without the author's permission, so `public/fonts/transcity.otf` is **not** in this repo. Download it
-  from the author, drop it at that path, and the wordmark picks it up; without it the logo falls back to Fredoka.
+- The **Lumen** wordmark and the page headings use **Caprasimo** (SIL Open Font License), loaded from Google Fonts and
+  cached by the service worker. Body text is Nunito and Fredoka, also OFL.

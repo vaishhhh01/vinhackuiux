@@ -76,14 +76,8 @@
   @keyframes flicker-fast { 0%, 100% { opacity: 1 } 12% { opacity: 0.35 } 24% { opacity: 1 } 36% { opacity: 0.35 } 50% { opacity: 1 } }
 }
 
-/* LUMEN wordmark: Transcity (demo, personal-use licence; see public/fonts/transcity-LICENSE.txt) */
-@font-face {
-  font-family: 'Transcity';
-  src: url('/fonts/transcity.otf') format('opentype');
-  font-display: swap;
-}
-.t-brand { font-family: 'Transcity', var(--font-display); font-weight: 400; letter-spacing: 0.02em; text-transform: none; }
-
+/* LUMEN wordmark: Caprasimo (SIL Open Font License, loaded from Google Fonts): a warm, swashy retro serif */
+.t-brand { font-family: 'Caprasimo', var(--font-display); font-weight: 400; letter-spacing: 0.02em; text-transform: none; }
 /* About button: a ring that keeps swelling out of it, so it is the only thing that asks for a press */
 .about-pulse { animation: about-pulse 1.5s ease-out infinite; }
 @keyframes about-pulse {
