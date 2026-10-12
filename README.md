@@ -206,6 +206,25 @@ The world starts with **two user reports already waiting** (Maren at Reef 2, Tam
 The Current is the water network data travels on. The thin edge of each band shows it: steady (strong), flickering
 (weak), gray dashes (cut). While cut, reports and declarations are saved in IndexedDB and sent when it returns.
 
+<h3><img src="docs/headings/water-view.svg" alt="Water view" height="46" /></h3>
+
+An optional **Water view** toggle sits in the bottom-left corner of the site (the round wave button). It is off by
+default and is only a look: the bands and every alert behave exactly the same. Switched on, the site is seen from
+underwater:
+
+- the page becomes deep water, with slow rays of light and rising bubbles;
+- each band gets a water veil: flowing light lines, a rippling surface edge and a gentle wave on the buttons;
+- hovering or clicking sends ripples across the water;
+- the pulse circles are drawn above the water, so a danger still reads clearly.
+
+It is there to check how readable and accessible the bands stay under water. Its choice is remembered in the
+browser, and it is built in separate files (`WaterView.tsx`, `WaterRipple.tsx`, `water-view.css`) so it can be
+removed without touching the rest of the site.
+
+<div align="center">
+<img src="docs/images/water.jpg" alt="The site with Water view switched on during a district danger" width="900" />
+</div>
+
 <h2><img src="docs/headings/tech-stack.svg" alt="Tech Stack" height="52" /></h2>
 
 React 18 + TypeScript + Vite, Tailwind, Framer Motion, Zustand, XState v5,
