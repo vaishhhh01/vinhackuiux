@@ -156,70 +156,25 @@ LUMEN is a wristband network which works on pressure, water pulses and biolumine
 
 <h3><img src="docs/headings/using-the-site.svg" alt="Using the site" height="46" /></h3>
 
-1. **On every load or refresh** the page is veiled in gray and only the About button pulses. Open About, read it,
-   close it; then everything is usable.
-2. **Left side**
-   - **Thalassari / Warden / Both:** choose a band, or see both side by side.
-   - **Wearing:** six Thalassari, each with their own Tideprint, Tideprint ID, Depth Mark and place on the map.
-     Naela and Oriel stand at the same colony (Garden 3); everyone else is somewhere different.
-   - **Pulses:** key to the alert flashes.
-   - **The Current:** Cut / Weak / Strong signal.
-3. **Right side, SIMULATION:** makes things happen in the world.
-   - *Someone reports:* a Thalassari reports from their own colony.
-   - *Colony fades:* a case appears, no alarm.
-   - *Colony goes dark:* the alarm fires by itself (sensor-triggered).
-   - *Every colony fails:* the rare case: everyone in the district is alerted and sent to the nearest district.
-   - *Shortcut test:* shows the depth guard stopping a route that is too deep.
-   - *Reset simulation:* back to the start (with the two default reports).
-4. **Real time:** both bands read one store, and separate browser windows are linked through a `BroadcastChannel`,
-   so a Thalassari report in one window shows up in a Warden window.
+**Left side**
+   - contains Thalassari/ Warden/ Both views, Wearing (profiles of Thalasarri), About pulses and simulate current.
 
-The world starts with **two user reports already waiting** (Maren at Reef 2, Tamsin at Colony 12).
+**Right side, SIMULATION:**
+   - containing information about what happens when someone reports, when colony fades, when colony goes dark,
+when all colonies fail and shortcut test and to reset simulation.
+
+**Real time:** both bands read one store, and separate browser windows are linked through a `BroadcastChannel`,
+   so a Thalassari report in one window shows up in a Warden window.
 
 <div align="center">
 <img src="docs/images/danger.jpg" alt="A district in danger: the Thalassari band showing the safe route and the Warden band showing the alert, with the Simulation panel on the right" width="900" />
 <br /><sub>A sensor-triggered alert: the affected Thalassari follows the route to the nearest safe colony while the Warden sees the same danger.</sub>
 </div>
 
-<h3><img src="docs/headings/the-bands.svg" alt="The bands" height="46" /></h3>
-
-**Thalassari** (no swiping, every step is a big button)
-- Home: Tideprint and ID, Depth Mark, five-level ladder, a small map (a view only), **REPORT**.
-- **REPORT** goes straight to the colony you are standing at. A wearer can only report where they are. Hold
-  **REPORT THEFT** (1 s). An optional "where are they going?" card follows and fades on its own.
-- Only the people in the affected area get the **danger** takeover: a red alert, two red circle pulses that throb out from the centre, then a map
-  that grows and frames them and their way out. Everyone else keeps their normal Home.
-- The route goes to the **nearest bright colony** outside the red zone, never deeper than the wearer's Depth Mark.
-  Only if every colony has failed does it send them out to the nearest district, and then **everyone** in the
-  district is alerted, wherever they stand. The exit is on the wearer's own level, so any Depth Mark can take it.
-
-**Warden**
-- The district map, then two buttons, **Cases** and **Eyes**, that switch the list shown right below them.
-  **Cases** are what the sensors flagged; **Eyes** are what Thalassari reported (Tideprint ID, where, where the
-  thief was heading, or `nil`).
-- **HANDLED** sits on the side of every row; press the middle of a row for its popup.
-- An eye's popup has **PATROL** and a hold-to-declare **DANGER**. One eye is enough, and a red colony can be
-  declared directly. **ALL CLEAR** sends everyone home.
-
-<h3><img src="docs/headings/the-current.svg" alt="The Current" height="46" /></h3>
-
-The Current is the water network data travels on. The thin edge of each band shows it: steady (strong), flickering
-(weak), gray dashes (cut). While cut, reports and declarations are saved in IndexedDB and sent when it returns.
-
 <h3><img src="docs/headings/water-view.svg" alt="Water view" height="46" /></h3>
 
-An optional **Water view** toggle sits in the bottom-left corner of the site (the round wave button). It is off by
-default and is only a look: the bands and every alert behave exactly the same. Switched on, the site is seen from
-underwater:
-
-- the page becomes deep water, with slow rays of light and rising bubbles;
-- each band gets a water veil: flowing light lines, a rippling surface edge and a gentle wave on the buttons;
-- hovering or clicking sends ripples across the water;
-- the pulse circles are drawn above the water, so a danger still reads clearly.
-
-It is there to check how readable and accessible the bands stay under water. Its choice is remembered in the
-browser, and it is built in separate files (`WaterView.tsx`, `WaterRipple.tsx`, `water-view.css`) so it can be
-removed without touching the rest of the site.
+An optional **Water view** toggle sits in the bottom-left corner of the site(off by default)
+It is there to check how readable and accessible the bands stay under water.
 
 <div align="center">
 <img src="docs/images/water.jpg" alt="The site with Water view switched on during a district danger" width="900" />
