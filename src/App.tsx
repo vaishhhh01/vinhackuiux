@@ -6,6 +6,7 @@ import { CurrentControls, PulseLegend, SimulatorPanel } from './components/Simul
 import { IntroCard } from './components/IntroCard'
 import { GlowDot } from './components/GlowDot'
 import { Tideprint } from './components/Tideprint'
+import { WaterBackdrop, WaterDefs, WaterToggle } from './components/WaterView'
 import { CITIZENS, citizenById, useStore } from './state/store'
 
 function Announcer() {
@@ -78,23 +79,32 @@ function useViewport() {
   return v
 }
 
-/** The LUMEN name sits on top of each phone, big and readable, with the band's role in a pill. */
+/**
+ * The LUMEN name sits dead-centre above each phone, the jellyfish hangs off its left side so it
+ * never pulls the word off-centre, and the band's role is a pill underneath. Mint for Thalassari, gold for the Warden.
+ */
 function Wordmark({ sub, gold }: { sub: string; gold?: boolean }) {
   const c = gold ? 'var(--warden-gold)' : 'var(--living-light)'
   return (
-    <div className="flex items-center gap-3">
-      <span className="bob"><GlowDot health="healthy" size={54} /></span>
-      <div className="flex flex-col items-start gap-1.5">
-        <div className="t-brand" style={{ fontSize: 50, lineHeight: 0.95, color: c, textShadow: `0 0 24px color-mix(in srgb, ${c} 45%, transparent)` }}>
+    <div className="flex w-full flex-col items-center gap-2 text-center">
+      <div className="relative">
+        <span className="absolute right-full top-1/2 mr-3 -translate-y-1/2"><span className="bob block"><GlowDot health="healthy" size={54} /></span></span>
+        <div
+          className="t-brand"
+          style={{
+            fontSize: 54, lineHeight: 1, color: c,
+            textShadow: `0 0 10px color-mix(in srgb, ${c} 80%, transparent), 0 0 26px color-mix(in srgb, ${c} 55%, transparent), 0 0 48px color-mix(in srgb, ${c} 35%, transparent)`,
+          }}
+        >
           Lumen
         </div>
-        <span
-          className="t-body rounded-full px-3"
-          style={{ fontSize: 14, lineHeight: '24px', color: c, border: `1.5px solid ${c}`, background: `color-mix(in srgb, ${c} 12%, transparent)` }}
-        >
-          {sub}
-        </span>
       </div>
+      <span
+        className="t-body rounded-full px-4"
+        style={{ fontSize: 14, lineHeight: '26px', color: c, border: `1.5px solid ${c}`, background: `color-mix(in srgb, ${c} 12%, transparent)` }}
+      >
+        {sub}
+      </span>
     </div>
   )
 }
@@ -207,7 +217,7 @@ export default function App() {
           </SideButton>
         ) : <span />}
         <div ref={aboutRef} data-testid={seenAbout ? undefined : 'start-here'}>
-          <SideButton tone={seenAbout ? 'plain' : 'gold'} active={!seenAbout} label={seenAbout ? 'About' : 'Start here'} onClick={openAbout}>
+          <SideButton tone="plain" active={false} label={seenAbout ? 'About' : 'Start here'} onClick={openAbout}>
             <span className="t-hero" style={{ fontSize: 30, lineHeight: '36px' }} aria-hidden="true">?</span>
           </SideButton>
         </div>
@@ -251,19 +261,22 @@ export default function App() {
   return (
     <div className="relative min-h-full" style={{ background: '#000' }}>
       <Announcer />
+      <WaterDefs />
+      <WaterBackdrop />
+      <WaterToggle />
 
       <main className={`relative z-10 ${desktop ? 'flex items-start justify-center gap-8 px-5 py-4' : 'flex flex-col items-center gap-5 px-3 py-4'}`}>
         {left}
 
         <div id="stage" className="flex justify-center gap-10" tabIndex={-1}>
           {(dual || mode === 'citizen') && (
-            <section aria-label="Thalassari band" className="flex flex-col items-start gap-3">
+            <section aria-label="Thalassari band" className="flex flex-col items-center gap-3">
               <Wordmark sub="Thalassari band" />
               <Scaled s={scale}><CitizenBand /></Scaled>
             </section>
           )}
           {(dual || mode === 'warden') && (
-            <section aria-label="Warden band" className="flex flex-col items-start gap-3">
+            <section aria-label="Warden band" className="flex flex-col items-center gap-3">
               <Wordmark sub="Warden band" gold />
               <Scaled s={scale}><WardenDashboard /></Scaled>
             </section>
@@ -289,7 +302,7 @@ export default function App() {
           className="t-header fixed bottom-4 right-4 z-40 rounded-full px-5"
           style={{
             height: 56, fontSize: 15, letterSpacing: '0.16em', color: 'var(--abyss)',
-            background: 'var(--warden-gold)', boxShadow: '0 0 28px rgba(255,233,168,0.5)',
+            background: 'var(--living-light)', boxShadow: '0 0 28px rgba(161,255,240,0.5)',
           }}
         >
           SIMULATION
@@ -301,7 +314,7 @@ export default function App() {
           role="dialog"
           aria-label="Simulation"
           className="fixed inset-x-0 bottom-0 z-50 max-h-[78vh] overflow-y-auto rounded-t-[32px] p-4"
-          style={{ background: '#050b12', borderTop: '2px solid var(--warden-gold)', boxShadow: '0 -20px 60px rgba(0,0,0,0.7)' }}
+          style={{ background: '#050b12', borderTop: '2px solid var(--living-light)', boxShadow: '0 -20px 60px rgba(0,0,0,0.7)' }}
         >
           <div className="mb-3 flex justify-end">
             <button type="button" onClick={() => setSheet(false)} className="t-body rounded-full px-5" style={{ height: 48, border: '1.5px solid rgba(228,246,243,0.3)' }}>

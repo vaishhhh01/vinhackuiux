@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { LinkRing } from './LinkRing'
 import { AlertPulse } from './AlertPulse'
+import { WaterVeil, useWaterStyle } from './WaterView'
 import { useMustMove, useStore, type Mode } from '../state/store'
 
 interface Props { mode: Mode; children: ReactNode }
@@ -9,13 +10,14 @@ interface Props { mode: Mode; children: ReactNode }
 export function BandShell({ mode, children }: Props) {
   const link = useStore((s) => s.link)
   const alert = useStore((s) => s.alert)
-  const citizenSafe = useStore((s) => s.citizenSafe)
+  const citizenSafe = useStore((s) => s.safeCitizens.includes(s.citizenId))
   const pulse = useStore((s) => s.pulses[mode])
   const warden = mode === 'warden'
   // the Guard Band gets the heavy white-gold authority ring, never the citizen danger loop
   const { affected } = useMustMove()
   const inDanger = alert === 'danger' && !warden && !citizenSafe && affected
 
+  const water = useWaterStyle()
   const tabColor = warden ? '#8a6d2a' : '#436d61'
 
   return (
@@ -47,8 +49,9 @@ export function BandShell({ mode, children }: Props) {
         ))}
       </svg>
 
-      <div className="absolute inset-0 pb-[16px] pt-[18px]">{children}</div>
+      <div className="absolute inset-0 pb-[16px] pt-[18px]" style={water}>{children}</div>
 
+      <WaterVeil />
       <AlertPulse event={pulse} persistentDanger={inDanger} />
       <LinkRing state={link} />
 

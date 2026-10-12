@@ -53,7 +53,7 @@ export function buildDistrictGraph(
 }
 
 export interface SafeTarget {
-  kind: 'colony' | 'level'
+  kind: 'colony' | 'level' | 'district'
   id: string
   label: string
   /** level number for kind === 'level' */
@@ -64,7 +64,8 @@ export interface SafeTarget {
 /**
  * Where to send somebody out of a danger zone:
  *  1. the NEAREST colony that is still bright, outside the zone, reached without leaving their Depth Mark;
- *  2. rare case, every colony has failed or is unreachable: the next level up (Level 2), if the mark allows it;
+ *  2. rare case, every colony has failed or is unreachable: out of this district, to the nearest district
+ *     (the exit), which is on the same level so every Depth Mark can take it;
  *  3. otherwise nowhere (null): "no safe route, stay still".
  */
 export function chooseSafeTarget(
@@ -88,12 +89,13 @@ export function chooseSafeTarget(
   }
   if (best) return best
 
-  // rare: nothing nearby is left. Go up a level, if the Depth Mark lets you.
-  if (MARK_MAX_LAYER[mark] >= 2) {
-    for (const w of graph.nodes.filter((n) => n.layer === 2)) {
-      const r = safeRoute(graph, 'you', w.id, mark, zone)
-      if (r && (!best || r.cost < best.route.cost)) best = { kind: 'level', id: w.id, label: 'NEXT LEVEL · 2', level: 2, route: r }
-    }
+  // rare: nothing in this district is left. Leave it for the nearest district (the exit).
+  // The exit is on the wearer's own level, so it is always one open step away.
+  const exit = graph.nodes.find((n) => n.id === 'exit')
+  if (exit) {
+    const open: Graph = { nodes: graph.nodes, edges: [...graph.edges, ['you', 'exit']] }
+    const r = safeRoute(open, 'you', 'exit', mark, zone)
+    if (r) best = { kind: 'district', id: 'exit', label: 'NEAREST DISTRICT', route: r }
   }
   return best
 }

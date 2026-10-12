@@ -1,0 +1,98 @@
+/* Water view styles. Imported only by WaterView.tsx; delete both together. */
+
+/* deep water: a lit surface glow fading into the dark, never pure black so the bands still read */
+.water-depth {
+  background:
+    radial-gradient(100% 46% at 50% -8%, rgba(77, 232, 210, 0.3), transparent 70%),
+    radial-gradient(60% 40% at 15% 100%, rgba(20, 110, 150, 0.22), transparent 70%),
+    radial-gradient(60% 40% at 88% 95%, rgba(14, 90, 130, 0.2), transparent 70%),
+    linear-gradient(180deg, #0f4a66 0%, #0a3550 30%, #06223a 62%, #031527 100%);
+}
+
+/* two layers of slow light rays from the surface, drifting against each other */
+.water-rays {
+  background: repeating-linear-gradient(105deg, transparent 0 80px, rgba(161, 255, 240, 0.075) 80px 140px, transparent 140px 250px);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 90%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 90%);
+  animation: water-rays 24s ease-in-out infinite alternate;
+}
+.water-rays-2 {
+  background: repeating-linear-gradient(98deg, transparent 0 130px, rgba(190, 240, 255, 0.05) 130px 170px, transparent 170px 330px);
+  animation-duration: 36s;
+  animation-direction: alternate-reverse;
+}
+@keyframes water-rays {
+  from { transform: translateX(-70px) skewX(-4deg); opacity: 0.5; }
+  to { transform: translateX(70px) skewX(4deg); opacity: 1; }
+}
+
+/* glassy bubbles that wobble as they rise */
+.water-bubble {
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.7) 0 12%, transparent 26%),
+    radial-gradient(circle at 50% 50%, rgba(161, 255, 240, 0.06) 55%, rgba(161, 255, 240, 0.22) 100%);
+  border: 1px solid rgba(190, 255, 245, 0.4);
+  box-shadow: inset 0 0 6px rgba(190, 255, 245, 0.2);
+  animation: water-rise linear infinite;
+}
+@keyframes water-rise {
+  0% { transform: translate3d(0, 0, 0) scale(0.7); opacity: 0; }
+  8% { opacity: 0.85; }
+  25% { transform: translate3d(var(--sway), -28vh, 0) scale(0.9); }
+  50% { transform: translate3d(calc(var(--sway) * -0.8), -57vh, 0) scale(1); }
+  75% { transform: translate3d(calc(var(--sway) * 0.9), -86vh, 0) scale(1.05); }
+  100% { transform: translate3d(calc(var(--sway) * -0.6), -118vh, 0) scale(1.1); opacity: 0; }
+}
+
+/* dark edges, like looking down a column of water */
+.water-vignette {
+  background: radial-gradient(120% 100% at 50% 40%, transparent 58%, rgba(1, 10, 28, 0.5) 100%);
+}
+
+
+/* inside a band: a calm teal depth, flowing light lines and soft beams. No blobs, the text stays readable. */
+.water-tint {
+  background:
+    radial-gradient(110% 80% at 50% 45%, transparent 55%, rgba(2, 24, 48, 0.35) 100%),
+    linear-gradient(180deg, rgba(20, 130, 160, 0.2) 0%, rgba(8, 70, 104, 0.22) 55%, rgba(3, 34, 64, 0.32) 100%);
+}
+
+/* flowing light lines, like light through a rippling surface */
+.water-waves {
+  --tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='56' viewBox='0 0 180 56' fill='none' stroke='%23bdfff5' stroke-linecap='round'%3E%3Cpath d='M0 14C22 4 45 24 90 14S158 4 180 14' stroke-width='1.6' opacity='.55'/%3E%3Cpath d='M0 40C30 30 52 50 90 40S150 30 180 40' stroke-width='1.1' opacity='.4'/%3E%3C/svg%3E");
+  background-image: var(--tile);
+  background-size: 180px 56px;
+  mix-blend-mode: screen;
+  opacity: 0.38;
+  animation: water-waves 18s linear infinite;
+}
+.water-waves-2 {
+  background-size: 260px 80px;
+  opacity: 0.26;
+  animation-duration: 27s;
+  animation-direction: reverse;
+}
+@keyframes water-waves {
+  from { background-position: 0 0; }
+  to { background-position: 180px 56px; }
+}
+
+/* the rippling surface edge at the top of the band */
+.water-surface {
+  height: 46px;
+  background:
+    linear-gradient(180deg, rgba(190, 255, 245, 0.34), transparent),
+    var(--tile) 0 100% / 90px 28px repeat-x,
+    var(--tile) 30px 70% / 70px 22px repeat-x;
+  --tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='28' viewBox='0 0 90 28' fill='none' stroke='%23bdfff5' stroke-width='2'%3E%3Cpath d='M0 14C11 6 22 22 45 14S79 6 90 14' opacity='.7'/%3E%3C/svg%3E");
+  animation: water-surface 6s ease-in-out infinite alternate;
+}
+@keyframes water-surface {
+  from { opacity: 0.6; background-position: 0 0, 0 100%, 0 70%; }
+  to { opacity: 1; background-position: 0 0, 45px 100%, -35px 70%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .water-rays, .water-bubble, .water-waves, .water-surface { animation: none; }
+  .water-bubble { display: none; }
+}

@@ -10,10 +10,13 @@ export function CitizenHome({ onReport }: { onReport: () => void }) {
   const mark = useStore((s) => s.depthMark)
   const alert = useStore((s) => s.alert)
   const { affected } = useMustMove()
+  // someone who has held "I'm safe" has dealt with the alert: their jellyfish goes back to normal
+  const safe = useStore((s) => s.safeCitizens.includes(s.citizenId))
   // only a declared danger changes the mood; a colony fading is not the wearer's to read
   // people outside the affected area see nothing at all: their Home stays exactly as it was
-  const mood = alert === 'danger' && affected ? 'dying' : 'healthy'
-  const moodWord = alert === 'danger' && affected ? 'district danger' : 'all lights are calm'
+  const inDanger = alert === 'danger' && affected && !safe
+  const mood = inDanger ? 'dying' : 'healthy'
+  const moodWord = inDanger ? 'district danger' : 'all lights are calm'
   const markWord = me.mark[0].toUpperCase() + me.mark.slice(1)
 
   return (
@@ -28,9 +31,9 @@ export function CitizenHome({ onReport }: { onReport: () => void }) {
           <Tideprint seed={me.seed} size={60} glow={false} />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="t-hero truncate" style={{ fontSize: 26, lineHeight: 1.1 }}>Hello, {me.name}</div>
+          <div className="t-hero truncate" style={{ fontSize: 26, lineHeight: 1.1 }}>{me.name}</div>
           <div className="t-body" style={{ color: 'var(--living-light)', letterSpacing: '0.06em' }} data-testid="tideprint-id">{me.tideprintId}</div>
-          <div className="t-micro">Age {me.age} · {markWord} Mark</div>
+          <div className="t-micro">Age {me.age} - {markWord} Mark</div>
         </div>
         <div className="shrink-0 bob" role="img" aria-label={moodWord}>
           <GlowDot health={mood} size={52} />

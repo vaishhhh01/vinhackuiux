@@ -11,41 +11,23 @@ const TONE: Record<Tone, string> = {
   cyan: 'var(--glow-cyan)',
 }
 
-function Action({ tone, icon, title, hint, onClick }: { tone: Tone; icon: React.ReactNode; title: string; hint: string; onClick: () => void }) {
+function Action({ tone, title, hint, onClick }: { tone: Tone; title: string; hint: string; onClick: () => void }) {
   const c = TONE[tone]
   return (
     <button
       type="button"
       onClick={onClick}
-      className="group flex w-full items-center gap-3 text-left transition-transform active:scale-[0.98]"
+      className="group flex w-full flex-col items-center justify-center text-center transition-transform active:scale-[0.98]"
       style={{
-        minHeight: 64, padding: '8px 14px 8px 10px', borderRadius: '24px 16px 24px 16px',
+        minHeight: 64, padding: '8px 14px', borderRadius: 24,
         background: `color-mix(in srgb, ${c} 10%, rgba(255,255,255,0.03))`,
         border: `1.5px solid color-mix(in srgb, ${c} 55%, transparent)`,
       }}
     >
-      <span
-        className="grid h-11 w-11 shrink-0 place-items-center rounded-full"
-        style={{ background: `color-mix(in srgb, ${c} 20%, transparent)`, color: c }}
-        aria-hidden="true"
-      >
-        {icon}
-      </span>
-      <span className="min-w-0">
-        <span className="t-body block" style={{ fontSize: 16, color: 'var(--text)' }}>{title}</span>
-        <span className="block text-[12px] font-bold" style={{ color: 'var(--text-70)' }}>{hint}</span>
-      </span>
+      <span className="t-body block" style={{ fontSize: 16, color: 'var(--text)' }}>{title}</span>
+      <span className="block text-[12px] font-bold" style={{ color: 'var(--text-70)' }}>{hint}</span>
     </button>
   )
-}
-
-const I = {
-  eye: <svg width="26" height="18" viewBox="0 0 24 16"><path d="M1 8 Q12 -2 23 8 Q12 18 1 8 Z" fill="none" stroke="currentColor" strokeWidth="2.2" /><circle cx="12" cy="8" r="3.6" fill="currentColor" /></svg>,
-  fade: <svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 18 0" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" /><circle cx="12" cy="14" r="4" fill="currentColor" /></svg>,
-  dark: <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 4l9 16H3z" fill="currentColor" /></svg>,
-  danger: <svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3L22 20.5H2z" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinejoin="round" /><path d="M12 10v5M12 17.4v.4" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" /></svg>,
-  clear: <svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2.4" /><path d="M7.5 12.5l3 3 6-7" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  route: <svg width="26" height="26" viewBox="0 0 24 24"><path d="M4 5h8a4 4 0 0 1 0 8H9a4 4 0 0 0 0 8h8" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /><path d="M16 17l3 3-3 3" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg>,
 }
 
 /**
@@ -54,33 +36,23 @@ const I = {
  */
 export function SimulatorPanel() {
   const s = useStore()
-  const target = s.colonies.find((c) => c.id === (s.selectedColonyId ?? 'garden-3'))
   return (
     <div data-testid="simulator" className="flex flex-col gap-4">
-      <div>
-        <div className="flex items-center gap-2">
-          <span className="relative grid h-3 w-3 place-items-center" aria-hidden="true">
-            <span className="absolute h-3 w-3 animate-ping rounded-full bg-[var(--warden-gold)] opacity-60" />
-            <span className="h-2 w-2 rounded-full bg-[var(--warden-gold)]" />
-          </span>
-          <h2 className="t-header" style={{ fontSize: 18, letterSpacing: '0.2em', color: 'var(--warden-gold)' }}>SIMULATION</h2>
-        </div>
-        <p className="mt-1 text-[13px] font-bold leading-snug" style={{ color: 'var(--text-70)' }}>
-          Make things happen in the water and watch both bands react live.
-        </p>
+      <div className="flex items-center justify-center gap-2">
+        <span className="relative grid h-3 w-3 place-items-center" aria-hidden="true">
+          <span className="absolute h-3 w-3 animate-ping rounded-full bg-[var(--living-light)] opacity-60" />
+          <span className="h-2 w-2 rounded-full bg-[var(--living-light)]" />
+        </span>
+        <h2 className="t-header text-center" style={{ fontSize: 18, letterSpacing: '0.2em', color: 'var(--living-light)', textShadow: '0 0 12px color-mix(in srgb, var(--living-light) 60%, transparent)' }}>SIMULATION</h2>
       </div>
 
       <div className="flex flex-col gap-2">
-        <Action tone="amber" icon={I.eye} title="Someone reports" hint="an eye reaches the Warden" onClick={s.sendMockReport} />
-        <Action tone="amber" icon={I.fade} title="Colony fades" hint="a case appears, no alarm" onClick={() => s.dropColony(42)} />
-        <Action tone="red" icon={I.dark} title="Colony goes dark" hint="the alarm fires by itself" onClick={() => s.dropColony(18)} />
-        <Action tone="red" icon={I.dark} title="Every colony fails" hint="rare: you must go up a level" onClick={s.failAll} />
-        <Action tone="gold" icon={I.route} title="Shortcut test" hint="watch the depth guard" onClick={s.triggerRouteDemo} />
+        <Action tone="amber" title="Someone reports" hint="an eye reaches the Warden" onClick={s.sendMockReport} />
+        <Action tone="amber" title="Colony fades" hint="a case appears, no alarm" onClick={() => s.dropColony(42)} />
+        <Action tone="red" title="Colony goes dark" hint="the alarm fires by itself" onClick={() => s.dropColony(18)} />
+        <Action tone="red" title="Every colony fails" hint="rare: go to nearest district" onClick={s.failAll} />
+        <Action tone="gold" title="Shortcut test" hint="watch the depth guard" onClick={s.triggerRouteDemo} />
       </div>
-
-      <p className="text-[12px] font-bold leading-snug" style={{ color: 'var(--text-70)' }} data-testid="sim-target">
-        Target: <span style={{ color: 'var(--text)' }}>{target?.name ?? 'Garden 3'}</span>
-      </p>
 
       <button
         type="button"
@@ -88,7 +60,7 @@ export function SimulatorPanel() {
         className="t-body rounded-full"
         style={{ height: 52, border: '1.5px solid rgba(98,139,123,0.7)', color: 'var(--text)', fontSize: 15 }}
       >
-        Reset world
+        Reset simulation
       </button>
     </div>
   )
@@ -144,7 +116,7 @@ export function CurrentControls() {
 /* ---------------- left side: pulse legend, one glance each ---------------- */
 
 const LEGEND: { k: PulseKind; name: string; look: string; vib: string }[] = [
-  { k: 'info', name: 'Info', look: '1 soft ring', vib: 'tap' },
+  { k: 'info', name: 'Stable', look: '1 soft ring', vib: 'tap' },
   { k: 'caution', name: 'Caution', look: '2 slow rings', vib: 'tap-tap' },
   { k: 'danger', name: 'Danger', look: '2 fast red', vib: 'buzz-buzz' },
   { k: 'allClear', name: 'All clear', look: '1 long ring', vib: 'long' },

@@ -13,7 +13,7 @@ import {
 } from '../logic/escalation'
 import { planPatrol, type Mark, type Patrol, type Stop } from '../logic/routing'
 import { fallingHistory } from '../logic/thresholds'
-import { mustMove } from '../logic/district'
+import { FAILED_GLOW, mustMove } from '../logic/district'
 
 export type Mode = 'citizen' | 'warden'
 export type LinkState = 'connected' | 'weak' | 'lost' | 'reconnecting'
@@ -42,7 +42,7 @@ export const CITIZENS = citizensSeed as Citizen[]
 export const citizenById = (id: string) => CITIZENS.find((c) => c.id === id) ?? CITIZENS[0]
 export const SYNC_KEYS = [
   'colonies', 'reports', 'caseStatus', 'link', 'lostAt', 'alert', 'dangerColonyId', 'dangerSource', 'bandsAlerted',
-  'citizenSafe', 'pulses', 'queue', 'mockCursor', 'patrol', 'routeBlocked', 'routeDemoNonce', 'lastReport',
+  'safeCitizens', 'pulses', 'queue', 'mockCursor', 'patrol', 'routeBlocked', 'routeDemoNonce', 'lastReport',
   'depthMark', 'citizenId',
 ] as const
 export const HOME_COLONY = 'garden-3'
@@ -75,7 +75,8 @@ interface State {
   dangerColonyId: string | null
   dangerSource: 'warden' | 'sensor' | null
   bandsAlerted: number | null
-  citizenSafe: boolean
+  /** everyone who has held "I'm safe" since this alert began; it stays closed for them whoever is switched to, until a new alert starts */
+  safeCitizens: string[]
   pulses: { citizen?: PulseEvent; warden?: PulseEvent }
   announce: { text: string; assertive: boolean; n: number }
   selectedColonyId: string | null
@@ -170,7 +171,7 @@ export const useStore = create<State>()((set, get) => {
     if (fresh.length) {
       const was = machine.getSnapshot().value
       if (was !== 'danger') {
-        set({ dangerColonyId: fresh[0], dangerSource: 'sensor', bandsAlerted: BANDS_ALERTED, citizenSafe: false })
+        set({ dangerColonyId: fresh[0], dangerSource: 'sensor', bandsAlerted: BANDS_ALERTED })
       }
       machine.send({ type: 'AUTO_CRITICAL' })
       if (was !== 'danger') {
@@ -192,7 +193,7 @@ export const useStore = create<State>()((set, get) => {
     prev = next
     set({ alert: next })
     if (next === 'danger') {
-      set({ citizenSafe: false })
+      set({ safeCitizens: [] })
       PulseHaptics.stop()
       PulseHaptics.play('danger')
     }
@@ -223,7 +224,7 @@ export const useStore = create<State>()((set, get) => {
         say('Danger declaration saved. Sends when Current returns.')
         return
       }
-      set({ dangerColonyId: target, dangerSource: 'warden', bandsAlerted: BANDS_ALERTED, citizenSafe: false })
+      set({ dangerColonyId: target, dangerSource: 'warden', bandsAlerted: BANDS_ALERTED })
       machine.send({ type: 'DECLARE' })
       emit('danger', 'citizen', false)
       emit('warden', 'warden', false)
@@ -256,7 +257,7 @@ export const useStore = create<State>()((set, get) => {
     dangerColonyId: null,
     dangerSource: null,
     bandsAlerted: null,
-    citizenSafe: false,
+    safeCitizens: [],
     pulses: {},
     announce: { text: '', assertive: false, n: 0 },
     selectedColonyId: null,
@@ -273,7 +274,7 @@ export const useStore = create<State>()((set, get) => {
     setMode: (mode) => set({ mode }),
     setSideBySide: (sideBySide) => set({ sideBySide }),
     setDepthMark: (depthMark) => set({ depthMark }),
-    setCitizen: (id) => set({ citizenId: id, depthMark: citizenById(id).mark, lastReport: null, citizenSafe: false }),
+    setCitizen: (id) => set({ citizenId: id, depthMark: citizenById(id).mark, lastReport: null }),
     applyRemote(p) {
       const { alert: remoteAlert, ...rest } = p as { alert?: AlertState }
       set(rest as Partial<State>)
@@ -306,7 +307,9 @@ export const useStore = create<State>()((set, get) => {
           ...c, glow: 14, history: fallingHistory(Math.max(c.history[0], 40), 14), flaggedCycles: c.flaggedCycles + 2,
         })),
       }))
-      say('Every colony in the district has failed')
+      // the whole district is told, including anyone who had already closed an earlier alert
+      set({ dangerSource: 'sensor', bandsAlerted: BANDS_ALERTED })
+      say('Every colony in the district has failed. Go to the nearest district.', true)
       reconcile()
     },
 
@@ -405,7 +408,7 @@ export const useStore = create<State>()((set, get) => {
     declareDanger: actions.declareDanger,
     allClear: () => actions.allClear(),
     citizenSafeNow() {
-      set({ citizenSafe: true })
+      set((s) => ({ safeCitizens: s.safeCitizens.includes(s.citizenId) ? s.safeCitizens : [...s.safeCitizens, s.citizenId] }))
       PulseHaptics.stop()
       say('Marked safe')
     },
@@ -469,12 +472,13 @@ export const useStore = create<State>()((set, get) => {
       if (s.alert !== 'danger') {
         // the guard demo needs a live alert to draw on
         const id = dangerCandidate(evalNow())?.id ?? HOME_COLONY
-        set({ dangerColonyId: id, dangerSource: 'warden', bandsAlerted: BANDS_ALERTED, citizenSafe: false })
+        set({ dangerColonyId: id, dangerSource: 'warden', bandsAlerted: BANDS_ALERTED })
         machine.send({ type: 'DECLARE' })
         emit('danger', 'citizen', false)
         say('District danger', true)
-      } else if (s.citizenSafe) {
-        set({ citizenSafe: false })
+      } else if (s.safeCitizens.includes(s.citizenId)) {
+        // the demo needs the alert on this wearer's band
+        set({ safeCitizens: s.safeCitizens.filter((id) => id !== s.citizenId) })
       }
     },
     setRouteBlocked: (routeBlocked) => set({ routeBlocked }),
@@ -492,7 +496,7 @@ export const useStore = create<State>()((set, get) => {
       void offlineQueue.clear()
       set({
         colonies: seedColonies(), reports: seedReports(), caseStatus: {}, link: 'connected', lostAt: null,
-        dangerColonyId: null, dangerSource: null, bandsAlerted: null, citizenSafe: false,
+        dangerColonyId: null, dangerSource: null, bandsAlerted: null, safeCitizens: [],
         selectedColonyId: null, highlightColonyId: null, selectedCaseId: null, patrol: null,
         lastReport: null, queue: [], mockCursor: 0, routeBlocked: false, citizenPanel: 0,
       })
@@ -517,7 +521,9 @@ export function useMustMove(): { affected: boolean; danger: Colony | undefined }
   const dangerId = useStore((s) => s.dangerColonyId)
   const me = citizenById(useStore((s) => s.citizenId))
   const danger = colonies.find((c) => c.id === dangerId)
-  return { danger, affected: danger ? mustMove(me, danger, DANGER_RADIUS) : false }
+  // when every colony has failed the whole district is affected, wherever the wearer stands
+  const allFailed = colonies.every((c) => c.glow < FAILED_GLOW)
+  return { danger, affected: allFailed || (danger ? mustMove(me, danger, DANGER_RADIUS) : false) }
 }
 
 export function colonyById(colonies: Colony[], id: string | null | undefined) {

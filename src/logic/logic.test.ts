@@ -198,7 +198,7 @@ describe('alert state machine', () => {
   })
 })
 
-describe('where to go: nearest safe colony, next level only as a last resort', () => {
+describe('where to go: nearest safe colony, the nearest district only as a last resort', () => {
   const waypoints = layers.graph.nodes.filter((n) => ['w-e', 'w-g', 's1', 's2'].includes(n.id)) as unknown as Waypoint[]
   const base: DistrictColony[] = (colonies as unknown as DistrictColony[]).map((c) => ({ id: c.id, name: c.name, x: c.x, y: c.y, glow: 90 }))
   const wearer = { x: 50, y: 48 }
@@ -221,17 +221,13 @@ describe('where to go: nearest safe colony, next level only as a last resort', (
     expect(go(dim, 'middle')!.id).not.toBe(near)
   })
 
-  it('rare case: every colony failed -> next level (Level 2) if the Depth Mark allows it', () => {
+  it('rare case: every colony failed -> the nearest district, whatever the Depth Mark', () => {
     const dead = base.map((c) => ({ ...c, glow: 12 }))
-    const t = go(dead, 'middle')!
-    expect(t.kind).toBe('level')
-    expect(t.level).toBe(2)
-    expect(t.route.deepest).toBeLessThanOrEqual(2)
-  })
-
-  it('rare case with a Shallow mark: nowhere to go, never a deeper route', () => {
-    const dead = base.map((c) => ({ ...c, glow: 12 }))
-    expect(go(dead, 'shallow')).toBeNull()
+    for (const mark of ['shallow', 'middle', 'deep', 'hollow'] as const) {
+      const t = go(dead, mark)!
+      expect(t.kind).toBe('district')
+      expect(t.id).toBe('exit')
+    }
   })
 
   it('whatever the mark, the chosen route never exceeds it', () => {

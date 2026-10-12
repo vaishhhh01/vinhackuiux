@@ -5,6 +5,7 @@ import { GlowDot, HEALTH_WORD } from './GlowDot'
 import { STALE_AFTER_MIN, healthOf } from '../logic/thresholds'
 import type { ColonyEval } from '../logic/escalation'
 import type { ActivePatrol, Colony } from '../state/store'
+import { FAILED_GLOW } from '../logic/district'
 import layers from '../data/layers.json'
 
 interface Props {
@@ -28,6 +29,7 @@ const patrolLine = line<{ x: number; y: number }>().x((d) => d.x).y((d) => d.y).
 /** Warden district map: every colony, flicker on flags, heat shimmer on suspect clusters, flowing Currents. */
 export function LayerMap({ colonies, evals, selectedId, highlightId, patrol, link, lostAge, dangerId, witnesses, onSelect, onBackground }: Props) {
   const danger = colonies.find((c) => c.id === dangerId)
+  const allFailed = colonies.every((c) => c.glow < FAILED_GLOW)
   const lost = link === 'lost'
   const evalOf = (id: string) => evals.find((e) => e.id === id)
   const suspects = colonies.filter((c) => {
@@ -59,7 +61,11 @@ export function LayerMap({ colonies, evals, selectedId, highlightId, patrol, lin
           </radialGradient>
         </defs>
         <CurrentLines flowing={!lost} />
-        {danger && (
+        {allFailed && (
+          // every colony has failed: the whole district is the red zone
+          <rect x="-50" y="-50" width="200" height="200" fill="rgba(255,90,90,0.2)" className="pulse-slow" />
+        )}
+        {danger && !allFailed && (
           <circle cx={danger.x} cy={danger.y} r={14} fill="rgba(255,90,90,0.22)" stroke="var(--glow-red)" strokeWidth="0.8" strokeDasharray="1.6 1.6" className="pulse-slow" />
         )}
         {suspects.map((c) => (

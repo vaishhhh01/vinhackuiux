@@ -13,7 +13,7 @@ import { citizenById, useMustMove, useStore } from '../state/store'
  */
 export function CitizenBand() {
   const alert = useStore((s) => s.alert)
-  const safe = useStore((s) => s.citizenSafe)
+  const safe = useStore((s) => s.safeCitizens.includes(s.citizenId))
   const me = citizenById(useStore((s) => s.citizenId))
   const [colonyId, setColonyId] = useState<string | null>(null)
   const prevAlert = useRef(alert)

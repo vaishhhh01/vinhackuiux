@@ -7,7 +7,7 @@ import { SafeRoutePath, type RoutePhase } from '../components/SafeRoutePath'
 import { DANGER_RADIUS, citizenById, useStore } from '../state/store'
 import layers from '../data/layers.json'
 import { MARK_MAX_LAYER, firstViolation, naiveShortcut } from '../logic/routing'
-import { buildDistrictGraph, chooseSafeTarget, type Waypoint } from '../logic/district'
+import { FAILED_GLOW, buildDistrictGraph, chooseSafeTarget, type Waypoint } from '../logic/district'
 
 const WAYPOINTS = (layers.graph.nodes as Waypoint[]).filter((n) => ['w-e', 'w-g', 's1', 's2'].includes(n.id))
 const EXIT = layers.exit
@@ -26,6 +26,7 @@ export function SafeRoute() {
   const demo = useStore((s) => s.routeDemoNonce)
   const blocked = useStore((s) => s.routeBlocked)
   const safeNow = useStore((s) => s.citizenSafeNow)
+  const allFailed = colonies.every((c) => c.glow < FAILED_GLOW)
   // latch: while the panel animates out after an all-clear it must keep looking calm, not flash red
   const lastKind = useRef<'danger' | 'allClear'>('danger')
   if (alert === 'danger' || alert === 'allClear') lastKind.current = alert
@@ -52,7 +53,7 @@ export function SafeRoute() {
     if (target && safe) {
       // keep the whole destination tag in view, not just its colony
       const dest = safe.points[safe.points.length - 1]
-      const text = target.kind === 'level' ? target.label : `SAFE · ${target.label}`
+      const text = target.kind === 'colony' ? `SAFE · ${target.label}` : target.label
       const half = Math.max(24, text.length * 2.15 + 6) / 2
       const below = dest.y > me.y // tag goes on the far side from the wearer so the two labels never sit on top of each other
       pts.push({ x: dest.x - half, y: below ? dest.y : dest.y - 13 }, { x: dest.x + half, y: below ? dest.y + 13 : dest.y + 4 })
@@ -99,7 +100,7 @@ export function SafeRoute() {
   const noRoute = blocked || !safe
   const lit = colonies // neutral lights: the route, not a colony's health, is what a wearer needs
   const dark = DANGER_RADIUS * (MAP_W / 100)
-  const sub = source === 'sensor' ? `Lights failing near ${danger.junction}` : `Warden declared ${danger.junction} unsafe`
+  const sub = allFailed ? 'Every colony in this district has failed' : source === 'sensor' ? `Lights failing near ${danger.junction}` : `Warden declared ${danger.junction} unsafe`
 
   return (
     <motion.div
@@ -161,11 +162,16 @@ export function SafeRoute() {
             </radialGradient>
           </defs>
           <CurrentLines opacity={0.18} />
-          <circle cx={danger.x} cy={danger.y} r={DANGER_RADIUS} fill="url(#dz)" stroke="var(--glow-red)" strokeWidth="0.7" strokeDasharray="1.6 1.6" className="pulse-slow" />
+          {allFailed ? (
+            // every colony has failed: the whole district is the red zone, nowhere here is safe
+            <rect x="-50" y="-50" width="200" height="200" fill="rgba(255,90,90,0.28)" className="pulse-slow" />
+          ) : (
+            <circle cx={danger.x} cy={danger.y} r={DANGER_RADIUS} fill="url(#dz)" stroke="var(--glow-red)" strokeWidth="0.7" strokeDasharray="1.6 1.6" className="pulse-slow" />
+          )}
           {/* destination: the nearest safe colony, or (rare) the next level */}
           {target && !noRoute && (() => {
             const dest = target.route.points[target.route.points.length - 1]
-            const text = target.kind === 'level' ? target.label : `SAFE · ${target.label}`
+            const text = target.kind === 'colony' ? `SAFE · ${target.label}` : target.label
             const w = Math.max(24, text.length * 2.15 + 6)
             return (
               <g transform={`translate(${dest.x} ${dest.y > me.y ? dest.y + 8 : dest.y - 7})`}>
@@ -197,7 +203,7 @@ export function SafeRoute() {
           className="absolute whitespace-nowrap rounded-full px-2"
           style={{ left: px(danger.x), top: py(danger.y) - 46, transform: 'translateX(-50%)', background: 'var(--glow-red)', color: 'var(--abyss)', fontSize: 10, fontWeight: 800, lineHeight: '15px' }}
         >
-          {danger.junction} · danger
+          {allFailed ? 'all colonies at danger' : `${danger.junction} at danger`}
         </span>
         </motion.div>
         <span className="sr-only">Dark zone radius {Math.round(dark)} pixels around {danger.name}</span>
@@ -223,8 +229,8 @@ export function SafeRoute() {
                 <p className="t-micro" style={{ color: 'var(--glow-cyan)' }} role="status">rerouted to fit your Depth Mark</p>
               ) : (
                 <p className="t-micro" data-testid="route-target">
-                  {target?.kind === 'level'
-                    ? 'every colony here has failed · go up to Level 2'
+                  {target?.kind === 'district'
+                    ? 'every colony here has failed · go to the nearest district'
                     : `nearest safe colony: ${target?.label ?? ''}`}
                 </p>
               )}

@@ -5,12 +5,11 @@ export const PROBLEM_STATEMENT =
   'In THALASSA, Ilyri colonies provide light, safe navigation, and warnings for every layer. However, illegal harvesters are stealing Ilyri and damaging colonies. When colonies die, districts lose light, travel becomes dangerous, and citizens cannot report threats quickly enough. Citizens and Wardens need a shared system to monitor Ilyri health, report suspicious activity, and respond before a district goes dark.'
 
 const STEPS: { who: string; what: string }[] = [
-  { who: 'Left', what: 'Choose a band: Thalassari, Warden, or Both side by side.' },
-  { who: 'Thalassari', what: 'Press REPORT, then hold REPORT THEFT. You can only report from where you stand.' },
-  { who: 'Warden', what: 'Open Eyes, press an eye, then hold DANGER to alert everyone.' },
-  { who: 'Thalassari', what: 'Follow the glowing route to the exit, then hold I’M SAFE.' },
-  { who: 'Warden', what: 'Press ALL CLEAR when the water is calm again.' },
-  { who: 'Right', what: 'SIMULATION makes things happen. THE CURRENT (left) cuts or weakens the signal.' },
+  { who: '1.', what: 'Choose a band: Thalassari, Warden or both' },
+  { who: '2.', what: 'Press REPORT -> hold REPORT THEFT' },
+  { who: '3.', what: 'Warden open Eye icon -> press an eye -> hold DANGER to alert everyone' },
+  { who: '4.', what: 'Thalassians follow glowing route to Exit for safety' },
+  { who: '5.', what: 'Press ALL CLEAR when the water is calm again.' },
 ]
 
 const list: Variants = { show: { transition: { staggerChildren: 0.09, delayChildren: 0.25 } } }
@@ -80,13 +79,6 @@ export function IntroCard({ open, onToggle }: { open: boolean; onToggle: () => v
               {STEPS.map((s, i) => (
                 <motion.li key={i} variants={rise}>
                   <div className="flex items-start gap-3">
-                    <span
-                      className="t-body grid h-9 w-9 shrink-0 place-items-center rounded-full"
-                      style={{ border: '1.5px solid var(--living-light)', color: 'var(--living-light)', fontSize: 16 }}
-                      aria-hidden="true"
-                    >
-                      {i + 1}
-                    </span>
                     <p>
                       <b style={{ color: 'var(--living-light)' }}>{s.who}.</b> {s.what}
                     </p>

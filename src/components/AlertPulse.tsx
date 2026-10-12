@@ -16,31 +16,35 @@ function Rings({ kind, repeat }: { kind: PulseKind; repeat?: boolean }) {
   const reduce = useReducedMotion()
   const s = SPEC[kind]
   const color = PULSE_COLOR[kind]
-  // The pattern is the number and rhythm of edge flashes: 1 soft, 2 slow, 2 fast, 1 long, 1 heavy.
+  // The pattern is the number and rhythm of beats: 1 soft, 2 slow, 2 fast, 1 long, 1 heavy.
+  // Each beat is a circle that throbs out from the centre of the band and fades as it grows.
+  const size = 200
   return (
-    <>
+    <div className="absolute inset-0 grid place-items-center">
       {Array.from({ length: s.rings }, (_, i) => (
         <motion.div
           key={i}
-          className="absolute inset-0 rounded-[36px]"
+          className="absolute rounded-full"
           style={{
+            width: size, height: size,
             border: `${s.stroke}px solid ${color}`,
-            boxShadow: `inset 0 0 ${kind === 'warden' ? 34 : 22}px ${color}`,
+            background: `radial-gradient(circle, color-mix(in srgb, ${color} ${Math.round(s.wash * 150)}%, transparent) 0%, transparent 70%)`,
+            boxShadow: `0 0 ${kind === 'warden' ? 38 : 24}px ${color}, inset 0 0 ${kind === 'warden' ? 30 : 18}px ${color}`,
           }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: reduce ? [0, 1, 0] : [0, 0.95, 0] }}
+          initial={{ opacity: 0, scale: 0.2 }}
+          animate={reduce ? { opacity: [0, 0.9, 0], scale: 1 } : { opacity: [0, 0.95, 0.5, 0], scale: [0.2, 0.85, 2.4, 3.6] }}
           transition={{
-            duration: s.dur, delay: i * s.gap, ease: 'easeInOut',
+            duration: s.dur, delay: i * s.gap, ease: 'easeOut',
             repeat: repeat ? 1 : 0, repeatDelay: repeat ? s.gap : 0,
           }}
         />
       ))}
-    </>
+    </div>
   )
 }
 
 /**
- * Edge flashes in the pulse colour. Kinds map 1:1 to the alert hierarchy.
+ * Circle beats in the pulse colour, throbbing out from the centre. Kinds map 1:1 to the alert hierarchy.
  * `danger` pulses exactly twice, then the band settles (the map grows instead).
  */
 export function AlertPulse({ event, persistentDanger }: { event?: PulseEvent; persistentDanger?: boolean }) {

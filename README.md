@@ -206,9 +206,9 @@ What Thalassari would actually demand:
    - *Someone reports:* a Thalassari reports from their own colony.
    - *Colony fades:* a case appears, no alarm.
    - *Colony goes dark:* the alarm fires by itself (sensor-triggered).
-   - *Every colony fails:* the rare case, everyone must go up a level.
+   - *Every colony fails:* the rare case: everyone in the district is alerted and sent to the nearest district.
    - *Shortcut test:* shows the depth guard stopping a route that is too deep.
-   - *Reset world:* back to the start (with the two default reports).
+   - *Reset simulation:* back to the start (with the two default reports).
 4. **Real time:** both bands read one store, and separate browser windows are linked through a `BroadcastChannel`,
    so a Thalassari report in one window shows up in a Warden window.
 
@@ -225,10 +225,11 @@ The world starts with **two user reports already waiting** (Maren at Reef 2, Tam
 - Home: Tideprint and ID, Depth Mark, five-level ladder, a small map (a view only), **REPORT**.
 - **REPORT** goes straight to the colony you are standing at. A wearer can only report where they are. Hold
   **REPORT THEFT** (1 s). An optional "where are they going?" card follows and fades on its own.
-- Only the people in the affected area get the **danger** takeover: a red alert, two red edge flashes, then a map
+- Only the people in the affected area get the **danger** takeover: a red alert, two red circle pulses that throb out from the centre, then a map
   that grows and frames them and their way out. Everyone else keeps their normal Home.
 - The route goes to the **nearest bright colony** outside the red zone, never deeper than the wearer's Depth Mark.
-  Only if every colony has failed does it send them up a level (a Shallow mark gets "stay still").
+  Only if every colony has failed does it send them out to the nearest district, and then **everyone** in the
+  district is alerted, wherever they stand. The exit is on the wearer's own level, so any Depth Mark can take it.
 
 **Warden**
 - The district map, then two buttons, **Cases** and **Eyes**, that switch the list shown right below them.
@@ -252,7 +253,7 @@ Dexie (IndexedDB offline queue), d3-scale / d3-shape, Workbox PWA (vite-plugin-p
 | --- | --- |
 | WATCH < 70 %, rapid decline > 15 pts / 24 h, CRITICAL < 20 % (auto alert), dying < 35 %, 1 eye for danger | `src/logic/thresholds.ts`, `src/logic/escalation.ts` |
 | Router never emits a layer deeper than the Depth Mark | `src/logic/routing.ts` (`safeRoute`) |
-| Nearest safe colony (glow ≥ 70 %, failed < 35 % never used), next level as a last resort, who must move, local reporting | `src/logic/district.ts` |
+| Nearest safe colony (glow ≥ 70 %, failed < 35 % never used), nearest district as a last resort, who must move, local reporting | `src/logic/district.ts` |
 | calm → flagged → escalated → danger → allClear (back to calm after 5 s) | `src/state/alertMachine.ts` |
 | Offline queue | `src/state/queue.ts` (Dexie), flushed in `src/state/store.ts` |
 | Cross-window live sync | `src/state/sync.ts` |
