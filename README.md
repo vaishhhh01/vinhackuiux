@@ -38,7 +38,7 @@ pressure, bioluminescent signals, depth permissions, Currents, and living Ilyri 
 
 ```bash
 git clone https://github.com/vaishhhh01/vinhackuiux.git
-cd vinhack-uiux
+cd vinhackuiux
 npm install
 npm run dev      # http://localhost:5173
 ```
