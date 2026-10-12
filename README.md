@@ -22,10 +22,12 @@
 
 <h2><img src="docs/headings/about.svg" alt="About" height="52" /></h2>
 
-THALASSA is an ocean-only universe. There is no land, sky, or human technology. Life is organised by water depth,
+THALASSA (inspired by the Greek Goddess of the sea) is an ocean-only universe. There is no land or sky. Life is organised by water depth,
 pressure, darkness, temperature, and moving Currents.
 
-The digital product is called **LUMEN**: a living wrist-band system that helps citizens protect glowing Ilyri
+In THALASSA, every person is born as one of four species: Thalassari, Vael, Veyr, or Orun. Thalassari are ordinary citizens who mostly live in the first two layers, and at age 12, they undergo the Depth Rite, which determines how deep they can safely travel or work. They collect Nerea, a rare mineral used as currency, while glowing jellyfish-like creatures called Ilyri provide essential light, navigation, and warnings throughout the world. Wardens (Orun) protect Ilyri colonies, but some Thalassari secretly steal Ilyri and trade them with deep-dwelling Veyr in exchange for rare minerals. Since Veyr cannot survive the lower pressure of the upper layers, they depend on these illegal trades, which damage Ilyri colonies and threaten entire communities.
+
+The digital product is called **LUMEN** is a living wrist-band system that helps wardens protect glowing Ilyri
 colonies, the source of public light, navigation, and danger warnings. When Ilyri are stolen, areas become dark and
 unsafe. LUMEN allows citizens to report the problem and lets Wardens respond before a district loses its light.
 
@@ -35,7 +37,7 @@ pressure, bioluminescent signals, depth permissions, Currents, and living Ilyri 
 <h3><img src="docs/headings/setup.svg" alt="Setup" height="46" /></h3>
 
 ```bash
-git clone https://github.com/vaishhhh01/vinhack-uiux.git
+git clone https://github.com/vaishhhh01/vinhackuiux.git
 cd vinhack-uiux
 npm install
 npm run dev      # http://localhost:5173
@@ -46,34 +48,27 @@ npm test         # unit tests: escalation, routing, where-to-go, patrol, alert m
 npm run build    # type-check + production build + service worker (Vercel-ready)
 ```
 
-The first screen after it opens: everything is veiled in gray and only **About** pulses. Open it, read it, close it,
-and the whole site unlocks.
-
-<div align="center">
-<img src="docs/images/first-load.jpg" alt="First load: gray veil with a pulsing About button" width="620" />
-</div>
-
 <h3><img src="docs/headings/layers-of-thalassa.svg" alt="Layers of Thalassa" height="46" /></h3>
 
-| Layer | Name | Character |
+| Layer | Name | About |
 |---|---|---|
-| 1 | Luminous Reaches | Warm, bright waters with schools, farms, markets, families, and coral forests |
-| 2 | Veiled Cities | Stable middle-depth cities with government, engineering, archives, and major trade |
-| 3 | Pressure Gates | Dangerous checkpoints and engineering zones where Currents are maintained |
-| 4 | The Hollow | Restricted, dark trenches; specialised outposts, research, and Veyr territories |
-| 5 | Frozen Floor | Near-unreachable deepest waters with ruins, ancient creatures, and Aethons |
+| 1 | Luminous Reaches | contains farms, markets, families and coral forests |
+| 2 | Veiled Cities | middle-depth cities |
+| 3 | Pressure Gates | Dangerous checkpoints and current gates |
+| 4 | The Hollow | Restricted, dark trenches |
+| 5 | Frozen Floor | Near-unreachable deepest waters for Aethons |
 
 <h3><img src="docs/headings/creatures-of-thalassa.svg" alt="Creatures of Thalassa" height="46" /></h3>
 
 | Creature | Role in the world |
 |---|---|
-| **Thalassari** | Main citizens: families, students, workers, traders, reporters, and travellers |
-| **Wardens** | A rare separate guardian species, each biologically connected to one layer |
-| **Vael** | Sound-based beings who relay messages and sense danger |
-| **Veyr** | Deep-water predator-like beings; some participate in the illegal Ilyri trade, but not all |
-| **Orun** | Giant whale-like memory keepers whose songs contain old knowledge |
-| **Ilyri** | Glowing jellyfish-like creatures that provide light and warnings |
-| **Aethons** | Ancient, enormous beings that inhabit the deepest unknown waters |
+| **Thalassari** | Main citizens like farmers, workers |
+| **Wardens** | Guardian species |
+| **Vael** | Sound-based beings |
+| **Veyr** | Deep-water predator-like beings who feed on Ilyris |
+| **Orun** | Giant whale-like memory keepers |
+| **Ilyri** | Glowing jellyfish-like creatures that provide light |
+| **Aethons** | Ancient, enormous beings under the deepest waters |
 
 <div align="center">
 <img src="docs/images/thalassari.jpg" alt="A Thalassari" width="560" />
@@ -81,69 +76,53 @@ and the whole site unlocks.
 <img src="docs/images/warden.jpg" alt="A Warden" width="560" />
 </div>
 
+
 <h3><img src="docs/headings/rules-of-thalassa.svg" alt="Rules of Thalassa" height="46" /></h3>
 
-**Nerea.** A small, durable, light-reactive crystal pearl used for everyday purchases, food, tools and transport,
-and for exchanging goods between travellers and Thalassari. It is a mineral currency, never made from Ilyri, so the
-economy does not depend on extracting the very organisms the civilisation protects.
+**Nerea.** crystal pearl currency of THALASSA used for everyday purchases, food, tools and transport,
+and for exchanging goods between travellers and Thalassari.
 
-**Depth Rite.** At 12, every Thalassari is measured in a controlled Pressure Well: safe pressure, sight in darkness,
+**Ilyri** are considered the essential element to survival in THALASSA (equivalent to oxygen on earth). Thalasarri's survival in colonies
+without Ilyri's light isnt possible underwater. Thus, they serve an important factor to the universe.
+
+**Depth Rite Ritual** At 12, every Thalassari is measured in a controlled Pressure Well: safe pressure, sight in darkness,
 glow strength (their **Tideprint**), tolerance to cold, warm water and fast Currents, and Current-sensing. They leave
 with a permanent glowing **Depth Mark**, their personal LUMEN Band, and travel permissions for the deepest layer
 their body can safely enter.
 
-**Wardens.** Powerful but limited: one depth layer each, able to sense disturbances and run protection systems
+**Wardens.** are powerful but limited to only one depth layer each, they are able to sense disturbances and run protection systems
 there, unable to patrol freely, and rare, so each covers many colonies, districts and Current routes.
 
-**Ilyri harvesting** Wild (protected, free-drifting), legally harvested (licensed nurseries and permitted
-zones), and illegal (taken from registered colonies). Registered colonies are never a legal source: removing Ilyri
-from one without permission, transporting them without authorisation, or damaging the habitat triggers a Warden
+**Ilyri harvesting is illegal** Wild (protected, free-drifting), legally harvested (licensed nurseries and permitted
+zones), and illegal. removing Ilyri from one without permission, transporting them without authorisation, or damaging the habitat triggers a Warden
 investigation.
 
-**Currents** are THALASSA’s supply routes. They carry food, warm water, minerals and trade goods from the productive Luminous Reaches down to the deeper layers, which can’t grow their own. Each Current has a safe stretch and a dangerous one, so cargo crews and travellers ride only the lit stretches that Ilyri colonies mark. In Lumen a dying colony or a declared danger can mark that stretch of Current as unsafe, which reroutes citizens on the Safe Route screen and also tells the Warden which supply routes are at risk.
+**Currents** are THALASSA’s supply routes. They carry food, warm water, minerals and trade goods from the productive Luminous Reaches down to the deeper layers, which can’t grow their own.
 
 <h3><img src="docs/headings/problem-statement.svg" alt="Problem statement" height="46" /></h3>
 
-In THALASSA, Ilyri colonies provide light, safe navigation, and warnings for every layer. But an illegal trade is
-draining them: some Thalassari, who have legal access to Ilyri habitats, steal colonies to sell to buyers in the
-deep, including some Veyr who need Ilyri to survive. Wardens investigate and keep records of thefts, but each Warden
-guards a whole layer and cannot watch every district. When colonies die, districts lose light, travel becomes
-dangerous, and citizens cannot report threats fast enough. Citizens and Wardens need a shared system to monitor Ilyri
-health, report what they witness, and respond before a district goes dark.
+1. Wardens in THALASSA investigate and keep records of thefts, but each Warden guards a whole layer and cannot watch every district. When colonies die, districts lose light, travel becomes dangerous, and citizens cannot report threats fast enough. 
+2. Citizens and Wardens need a shared system to monitor Ilyri health, report what they witness, and respond before a district goes dark.
 
 <h3><img src="docs/headings/proposed-solution.svg" alt="Proposed solution" height="46" /></h3>
 
-Citizens and Wardens need a shared system to monitor Ilyri health, report suspicious activity, and respond before a
-district goes dark.
-
-LUMEN is a wristband network that gives Wardens eyes in every district. Colony sensors flag unusual decline,
-citizens confirm what they saw with one press, and the Warden judges the evidence, declares danger and guides
-everyone to safety. **LUMEN never accuses anyone. It gathers evidence so the Warden can.**
-
-Wardens have colony data, but data says *what* is happening, not *who* is doing it, and slow declines look like
-natural fluctuation. Citizens have eyes but no fast channel. LUMEN joins the two:
-
-- Sensors flag anomalies quietly.
-- Citizens confirm with one press.
-- The confirmed case escalates to the Warden.
-- The Warden declares danger.
-- Citizens get safe routes before the district goes dark.
+LUMEN is a wristband network which works on pressure, water pulses and bioluminescent light, that gives Wardens eyes in every district. It detects unusual activity around protected colonies, allows citizens to silently report suspected illegal harvesting, and alerts Wardens so they can investigate before the damage spreads. When a genuine threat is confirmed, LUMEN warns nearby citizens and guides them through safe routes within their Depth Mark. It also helps Wardens track reports, monitor colony safety, and coordinate patrols across different layers. By connecting citizens, Wardens, and the Current communication network, LUMEN helps prevent illegal Ilyri trading while protecting both the ecosystem and the people who depend on it.
 
 <h3><img src="docs/headings/personas.svg" alt="Personas" height="46" /></h3>
 
-**Naela**, age 19, Middle Mark Thalassari. She lives and works in Layer 2 and visits her family in Layer 1. She
-can't enter Layers 3 to 5.
+**Naela** : Age - 19, Middle Mark Thalassari. Lives and works in Layer 2 and visits her family in Layer 1.
 
 - **Needs:** to know she's safe, which way to swim, and a way to report what she sees without stopping.
-- **Frustration:** she sees theft but can't reach a Warden in time.
-- **Context:** one-handed, mid-swim, murky water, possibly scared.
+- **Frustration:** she sees theft but can't communicate with Warden on time.
+- **Context:** one-handed, mid-swim, possibly scared.
 
-**The Layer 1 Warden.** A rare, layer-bound guardian responsible for hundreds of colonies. They can't be
-everywhere. They need prioritised, trustworthy information, not noise.
+**The Layer 1 Warden.** A rare, layer-bound guardian responsible for hundreds of colonies.  
+- **Needs:** They need report of each colony's Ilyri's condition in one place. Trustworthy information and not noise
+- **Frustration:** Cant manage all colonies in the district at once and provide a way for Thalassari's to safety quickly.
 
 <h3><img src="docs/headings/primary-user-flow.svg" alt="Primary user flow" height="46" /></h3>
 
-1. Naela passes a Current junction and sees two figures loading glowing creatures into a pressure crate.
+1. Naela passes a Colony in Level 1 and sees theft happening (Ilyri's being stolen from the colony)
 2. She presses and holds the band, and the theft report goes out with her layer and location attached.
 3. She optionally says which colony she thinks they're heading to.
 4. On the Warden's band, the report appears under **Eyes** for that colony.
@@ -151,46 +130,29 @@ everywhere. They need prioritised, trustworthy information, not noise.
 6. Every band in the affected area pulses red. Naela's band shows a glowing route to the nearest safe colony,
    within her depth.
 7. The Warden follows the patrol route, stops the thieves and marks the case handled.
-8. The bands settle: all clear.
-
+8. If the Warden cant help the colonies on time, Danger alert given to alert the Thalasarri's in the colony on time for safety exit.
 <h3><img src="docs/headings/why-the-design-belongs-to-thalassa.svg" alt="Why the design belongs to Thalassa" height="46" /></h3>
 
-- **The interface is made of the world itself:** pressure, water pulses, bioluminescent light, coral. There is no
-  glass, no text-heavy feed, no notification banners, because none of that exists underwater in this culture.
-- **It encodes the biology:** depth restrictions are baked into routing and permissions; the Depth Mark is a
-  first-class element on the citizen band.
+- **The interface is made of the world itself:** pressure, water pulses, bioluminescent light, coral. No
+  glass or notification buttons and small fonts.
+- **Panic-proof:** the alert overrides everything and can't be dismissed accidentally, and **REPORT** is always
+  one press from Home.
+- **One-thumb reach:** everything works on your own wrist, one hand, mid-swim.
 - **It encodes the social structure:** citizens get simplicity and one duty (report what you see); Wardens get
-  breadth and authority (cases, patrols, broadcasts), because Thalassari are a distributed population and Wardens
-  are rare, layer-bound specialists.
-- **The sensors-plus-witnesses model mirrors real ecology:** instruments detect anomalies, people provide truth.
+  breadth and authority (cases, patrols, broadcasts).
+- **Zero typing, zero memory:** the band knows your layer, your district, your colony. Humans supply only what they
+  saw.
+- **The sensors+witnesses model mirrors real ecology:** instruments detect anomalies, people provide truth.
   That is why both bands exist, and why neither is redundant.
-- **Visual storytelling:** health is colour, urgency is pressure on the wrist, safety is a glowing line of living
-  light. You can read the state of a district at a glance, the way a glowing underwater people would build it.
+- **Visual storytelling:** You can read the state of a district at a glance, the way a glowing underwater thalassari's would build it.
+  (Example: health is colour, urgency is pressure on the wrist, safety is a glowing line of living
+  light.)
 
 <div align="center">
 <img src="docs/images/ilyri.jpg" alt="An Ilyri colony member" width="300" />
 </div>
 
 <h2><img src="docs/headings/about-lumen.svg" alt="About LUMEN" height="52" /></h2>
-
-<h3><img src="docs/headings/accessibility-and-usability.svg" alt="Accessibility and usability" height="46" /></h3>
-
-What Thalassari would actually demand:
-
-- **Glanceability:** every screen readable in under a second while swimming. One idea per screen.
-- **Large targets, webbed hands:** minimum 64 px touch targets, a few fat buttons instead of many small ones.
-- **Redundant encoding:** never colour alone. A fading colony is amber with a slow pulse and a half-ring; danger is
-  red with a fast double pulse and a solid triangle. Murky water and dim light make colour unreliable; vibration
-  patterns are not.
-- **One-thumb reach:** everything works on your own wrist, one hand, mid-swim.
-- **Panic-proof:** the alert overrides everything and can't be dismissed accidentally, and **REPORT** is always
-  one press from Home.
-- **Zero typing, zero memory:** the band knows your layer, your district, your colony. Humans supply only what they
-  saw.
-- **Calibrated trust:** citizens see "danger" or "safe" and a route, never "theft confirmed by suspect X". No mobs,
-  no false accusations; Wardens stay the only accusers. Citizens are not even shown colony health.
-- **Press-and-hold on every critical action** (report, declare danger): "pressure = intent", straight from the lore,
-  and it prevents accidental triggers.
 
 <h3><img src="docs/headings/using-the-site.svg" alt="Using the site" height="46" /></h3>
 
@@ -246,19 +208,9 @@ The Current is the water network data travels on. The thin edge of each band sho
 
 <h2><img src="docs/headings/tech-stack.svg" alt="Tech Stack" height="52" /></h2>
 
-React 18 + TypeScript + Vite, Tailwind (tokens in `src/styles/tokens.css`), Framer Motion, Zustand, XState v5,
-Dexie (IndexedDB offline queue), d3-scale / d3-shape, Workbox PWA (vite-plugin-pwa), Vitest. Vercel for deployment
-
-| Rule | File |
-| --- | --- |
-| WATCH < 70 %, rapid decline > 15 pts / 24 h, CRITICAL < 20 % (auto alert), dying < 35 %, 1 eye for danger | `src/logic/thresholds.ts`, `src/logic/escalation.ts` |
-| Router never emits a layer deeper than the Depth Mark | `src/logic/routing.ts` (`safeRoute`) |
-| Nearest safe colony (glow ≥ 70 %, failed < 35 % never used), nearest district as a last resort, who must move, local reporting | `src/logic/district.ts` |
-| calm → flagged → escalated → danger → allClear (back to calm after 5 s) | `src/state/alertMachine.ts` |
-| Offline queue | `src/state/queue.ts` (Dexie), flushed in `src/state/store.ts` |
-| Cross-window live sync | `src/state/sync.ts` |
-| Press-and-hold (1000 ms, pressure-aware, keyboard) | `src/components/PressureButton.tsx` |
-| Pulse patterns + Vibration API | `src/components/PulseHaptics.ts`, `src/components/AlertPulse.tsx` |
+React 18 + TypeScript + Vite, Tailwind, Framer Motion, Zustand, XState v5,
+Dexie (IndexedDB offline queue), d3-scale / d3-shape, Workbox PWA (vite-plugin-pwa), Vitest. 
+Vercel for deployment
 
 <h3><img src="docs/headings/credits.svg" alt="Credits" height="46" /></h3>
 
